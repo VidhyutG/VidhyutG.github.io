@@ -1,0 +1,18 @@
+{
+  "name": "vidhyut-portfolio",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "check": "tsc && node scripts/check-site.mjs",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "format": "prettier --write index.html assets/css/portfolio.css assets/js/portfolio.js scripts/check-site.mjs package.json tsconfig.json README.md"
+  },
+  "devDependencies": {
+    "prettier": "3.9.6",
+    "typescript": "7.0.2",
+    "vite": "8.2.2"
+  }
+}

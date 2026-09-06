@@ -1,630 +1,743 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!--=============== FAVICON ===============-->
-    <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
-
-    <!--=============== BOXICONS ===============-->
-    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-
-    <!--=============== SWIPER CSS ===============-->
-    <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
-
-    <!--=============== CSS ===============-->
-    <link rel="stylesheet" href="assets/css/styles.css">
-
-    <title> Vidhyut's Portfolio Website </title>
-</head>
-<body>
-<!--=============== HEADER ===============-->
-<header class="header" id="header">
-    <nav class="nav container">
-        <a href="#" class="nav__logo">Vidhyut</a>
-
-        <div class="nav__menu">
-            <ul class="nav__list">
-                <li class="nav__item">
-                    <a href="#home" class="nav__link active-link">
-                        <i class='bx bx-home-alt nav__icon'></i>
-                    </a>
-                </li>
-
-                <li class="nav__item">
-                    <a href="#about" class="nav__link">
-                        <i class='bx bx-user nav__icon'></i>
-                    </a>
-                </li>
-
-                <li class="nav__item">
-                    <a href="#skills" class="nav__link">
-                        <i class='bx bx-book nav__icon'></i>
-                    </a>
-                </li>
-
-                <li class="nav__item">
-                    <a href="#work" class="nav__link">
-                        <i class='bx bx-briefcase-alt-2 nav__icon'></i>
-                    </a>
-                </li>
-
-                <li class="nav__item">
-                    <a href="#contact" class="nav__link">
-                        <i class='bx bx-message-square-detail nav__icon'></i>
-                    </a>
-                </li>
-            </ul>
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101613" />
+    <meta
+      name="description"
+      content="Vidhyut Gopinath — Software Engineer III at Cisco Secure Firewall. Platform engineering across firmware, Linux, networking, applications, and security. Deep ownership. Thoughtful leadership."
+    />
+    <meta
+      property="og:title"
+      content="Vidhyut Gopinath — Depth in every layer."
+    />
+    <meta
+      property="og:description"
+      content="Platform engineering, security, and technical leadership. From the first boot to the final review."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://vidhyutg.github.io/" />
+    <link rel="canonical" href="https://vidhyutg.github.io/" />
+    <link rel="icon" type="image/svg+xml" href="/assets/img/monogram.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/assets/css/portfolio.css" />
+    <title>Vidhyut Gopinath — Platform Engineer</title>
+    <script type="module" src="/assets/js/portfolio.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="scroll-progress" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="wordmark" href="#home" aria-label="Vidhyut Gopinath, home"
+        ><span class="monogram" aria-hidden="true">v<span>g</span></span
+        ><span
+          >Vidhyut<br />Gopinath<span class="wordmark-period">.</span></span
+        ></a
+      >
+      <nav aria-label="Main navigation">
+        <a href="#work">Work<span class="nav-dot" aria-hidden="true"></span></a
+        ><a href="#approach"
+          >Approach<span class="nav-dot" aria-hidden="true"></span></a
+        ><a href="#about"
+          >About<span class="nav-dot" aria-hidden="true"></span
+        ></a>
+      </nav>
+      <div class="header-actions">
+        <button
+          class="theme-toggle"
+          type="button"
+          aria-label="Switch to light theme"
+          title="Switch color theme"
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="5" />
+            <path
+              d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"
+            />
+          </svg></button
+        ><a
+          class="header-resume"
+          href="/resume/Vidhyut_Gopinath_Resume_2026.pdf"
+          target="_blank"
+          rel="noopener"
+          >Résumé <span aria-hidden="true">↗</span></a
+        >
+      </div>
+    </header>
+    <main id="main">
+      <section
+        class="hero section-shell"
+        id="home"
+        aria-labelledby="hero-title"
+      >
+        <div class="hero-copy">
+          <p class="eyebrow hero-eyebrow">
+            <span class="status-dot" aria-hidden="true"></span> Software
+            Engineer III · Cisco Secure Firewall
+          </p>
+          <h1 id="hero-title">
+            Depth in<br />every <span class="italic-word">layer.</span>
+          </h1>
+          <p class="hero-description">
+            I’m Vidhyut. I build secure platforms from firmware to
+            applications—and carry the difficult work all the way through.
+          </p>
+          <a class="text-link hero-link" href="#work"
+            >Explore my work <span aria-hidden="true">↓</span></a
+          >
+          <div class="hero-footnote">
+            <span class="mono">BASED IN CALIFORNIA</span
+            ><span class="footnote-line" aria-hidden="true"></span
+            ><span>Building at Cisco since 2022</span>
+          </div>
         </div>
-
-        <!-- Theme change button -->
-        <i class='bx bx-moon change-theme' id="theme-button"></i>
-    </nav>
-</header>
-
-<!--=============== MAIN ===============-->
-<main class="main">
-    <!--=============== HOME ===============-->
-    <section class="home section" id="home">
-        <div class="home__container container grid">
-            <div class="home__data">
-                <span class="home__greeting">Hello, I'm</span>
-                <h1 class="home__name">Vidhyut Gopinath</h1>
-                <h3 class="home__education">Fullstack Web Application Developer</h3>
-
-                <div class="home__buttons">
-                    <!-- Insert your CV -->
-                    <a download="" href="https://docs.google.com/document/d/1MZm0ot5fhcLb0C1mujHY8IDfsKuF9eyQ6iZG5nJsEjQ/edit?usp=sharing" class="button button--ghost">
-                        Resume
-                    </a>
-                    <a href="#about" class="button">About me</a>
-                </div>
+        <div
+          class="system"
+          aria-label="Interactive map of my engineering practice"
+        >
+          <div class="system-heading">
+            <span class="mono">01 / ENGINEERING SURFACE</span
+            ><button
+              class="motion-toggle mono"
+              type="button"
+              aria-pressed="false"
+            >
+              <span class="motion-icon" aria-hidden="true">Ⅱ</span> Pause motion
+            </button>
+          </div>
+          <div class="system-drawing">
+            <svg
+              class="stack-svg"
+              viewBox="0 0 640 660"
+              role="img"
+              aria-labelledby="stack-title stack-desc"
+            >
+              <title id="stack-title">
+                Connected layers of platform engineering
+              </title>
+              <desc id="stack-desc">
+                An abstract diagram connecting applications, operating systems,
+                networking, firmware, hardware interfaces, and secure delivery.
+                Choose an area below to read about my work.
+              </desc>
+              <defs>
+                <pattern
+                  id="diagram-grid"
+                  width="40"
+                  height="40"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M40 0H0V40"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-opacity=".12"
+                    stroke-width=".6"
+                  />
+                </pattern>
+                <linearGradient id="plane-fill" x1="0" y1="0" x2="1" y2="1">
+                  <stop stop-color="#d5ff70" stop-opacity=".24" />
+                  <stop offset="1" stop-color="#d5ff70" stop-opacity=".015" />
+                </linearGradient>
+              </defs>
+              <rect
+                x="15"
+                y="5"
+                width="610"
+                height="630"
+                fill="url(#diagram-grid)"
+                opacity=".65"
+              />
+              <path
+                class="stack-spine"
+                d="M320 35V610M110 160V525M530 160V525"
+              />
+              <g class="stack-plane" data-plane="5">
+                <path
+                  class="plane-edge"
+                  d="m110 468 210 120 210-120v10L320 598 110 478Z"
+                />
+                <path
+                  class="plane-face"
+                  d="m110 468 210-120 210 120-210 120Z"
+                />
+                <path
+                  class="plane-circuit"
+                  d="m185 468 135-77 135 77-135 77Zm80 0 55-32 55 32-55 32Z"
+                />
+                <circle class="plane-node" cx="320" cy="468" r="5" />
+                <path class="plane-label-line" d="M530 468h55" />
+                <text x="598" y="473">06</text>
+              </g>
+              <g class="stack-plane" data-plane="4">
+                <path
+                  class="plane-edge"
+                  d="m110 408 210 120 210-120v10L320 538 110 418Z"
+                />
+                <path
+                  class="plane-face"
+                  d="m110 408 210-120 210 120-210 120Z"
+                />
+                <path
+                  class="plane-circuit"
+                  d="m185 408 135-77 135 77-135 77Zm80 0 55-32 55 32-55 32Z"
+                />
+                <circle class="plane-node" cx="320" cy="408" r="5" />
+                <path class="plane-label-line" d="M530 408h55" />
+                <text x="598" y="413">05</text>
+              </g>
+              <g class="stack-plane" data-plane="3">
+                <path
+                  class="plane-edge"
+                  d="m110 348 210 120 210-120v10L320 478 110 358Z"
+                />
+                <path
+                  class="plane-face"
+                  d="m110 348 210-120 210 120-210 120Z"
+                />
+                <path
+                  class="plane-circuit"
+                  d="m185 348 135-77 135 77-135 77Zm80 0 55-32 55 32-55 32Z"
+                />
+                <circle class="plane-node" cx="320" cy="348" r="5" />
+                <path class="plane-label-line" d="M530 348h55" />
+                <text x="598" y="353">04</text>
+              </g>
+              <g class="stack-plane" data-plane="2">
+                <path
+                  class="plane-edge"
+                  d="m110 288 210 120 210-120v10L320 418 110 298Z"
+                />
+                <path
+                  class="plane-face"
+                  d="m110 288 210-120 210 120-210 120Z"
+                />
+                <path
+                  class="plane-circuit"
+                  d="m185 288 135-77 135 77-135 77Zm80 0 55-32 55 32-55 32Z"
+                />
+                <circle class="plane-node" cx="320" cy="288" r="5" />
+                <path class="plane-label-line" d="M530 288h55" />
+                <text x="598" y="293">03</text>
+              </g>
+              <g class="stack-plane" data-plane="1">
+                <path
+                  class="plane-edge"
+                  d="m110 228 210 120 210-120v10L320 358 110 238Z"
+                />
+                <path
+                  class="plane-face"
+                  d="m110 228 210-120 210 120-210 120Z"
+                />
+                <path
+                  class="plane-circuit"
+                  d="m185 228 135-77 135 77-135 77Zm80 0 55-32 55 32-55 32Z"
+                />
+                <circle class="plane-node" cx="320" cy="228" r="5" />
+                <path class="plane-label-line" d="M530 228h55" />
+                <text x="598" y="233">02</text>
+              </g>
+              <g class="stack-plane is-selected" data-plane="0">
+                <path
+                  class="plane-edge"
+                  d="m110 168 210 120 210-120v10L320 298 110 178Z"
+                />
+                <path
+                  class="plane-face"
+                  d="m110 168 210-120 210 120-210 120Z"
+                />
+                <path
+                  class="plane-circuit"
+                  d="m185 168 135-77 135 77-135 77Zm80 0 55-32 55 32-55 32Z"
+                />
+                <circle class="plane-node" cx="320" cy="168" r="5" />
+                <path class="plane-label-line" d="M530 168h55" />
+                <text x="598" y="173">01</text>
+              </g>
+              <path class="signal-path" d="M320 35V590" />
+              <circle class="signal-packet" cx="320" cy="35" r="4" />
+              <text class="drawing-caption" x="26" y="620">
+                CONNECTED BY OWNERSHIP
+              </text>
+              <path
+                class="diagram-cross"
+                d="M25 36v16m-8-8h16m568 568v16m-8-8h16"
+              />
+            </svg>
+          </div>
+          <div
+            class="layer-selector"
+            role="group"
+            aria-label="Explore an engineering area"
+          >
+            <button type="button" data-layer="0" aria-pressed="true">
+              <span>01</span> Apps</button
+            ><button type="button" data-layer="1" aria-pressed="false">
+              <span>02</span> OS</button
+            ><button type="button" data-layer="2" aria-pressed="false">
+              <span>03</span> Network</button
+            ><button type="button" data-layer="3" aria-pressed="false">
+              <span>04</span> Firmware</button
+            ><button type="button" data-layer="4" aria-pressed="false">
+              <span>05</span> Hardware</button
+            ><button type="button" data-layer="5" aria-pressed="false">
+              <span>06</span> Security
+            </button>
+          </div>
+          <div class="layer-detail" aria-live="polite" aria-atomic="true">
+            <span class="layer-index mono">01—06</span>
+            <div>
+              <h2 id="layer-title">Applications & architecture</h2>
+              <p id="layer-description">
+                Application management, memory efficiency, and architecture that
+                the next engineer can understand.
+              </p>
             </div>
-
-            <div class="home__handle">
-                <!-- Insert your image, according to the example size of the portfolio -->
-                <img src="assets/img/me.png" alt="" class="home__img">
-            </div>
-
-            <div class="home__social">
-
-                <a href="https://www.linkedin.com/in/vidhyut-gopinath-2a7306155/" class="home__social-link">
-                    <i class='bx bxl-linkedin-square'></i>
-                </a>
-
-                <a href="https://github.com/VidhyutG" class="home__social-link">
-                    <i class='bx bxl-github'></i>
-                </a>
-
-                <!--
-
-                <a href="https://dribbble.com/" target="_blank" class="home__social-link">
-                    <i class='bx bxl-dribbble' ></i>
-                </a>
-
-                !-->
-
-            </div>
-
-            <a href="#about" class="home__scroll">
-                <i class='bx bx-mouse home__scroll-icon'></i>
-                <span class="home__scroll-name">Scroll Down</span>
-            </a>
+          </div>
         </div>
-    </section>
-
-    <!--=============== ABOUT ===============-->
-    <section class="about section" id="about">
-        <span class="section__subtitle">Get To Know</span>
-        <h2 class="section__title">About Me</h2>
-
-        <div class="about__container container grid">
-            <img src="assets/img/about.jpg" alt="" class="about__img">
-
-            <div class="about__data">
-                <div class="about__info">
-                  <!-- change -->
-                    <div class="about__box">
-                        <i class='bx bx-award about__icon'></i>
-                        <h3 class="about__title">Experience</h3>
-                        <span class="about__subtitle">3 + Years</span>
-                    </div>
-                    <!-- change -->
-                    <div class="about__box">
-                        <i class='bx bx-briefcase-alt about__icon'></i>
-                        <h3 class="about__title">Worked on</h3>
-                        <span class="about__subtitle">2 Projects</span>
-                    </div>
-                    <!-- optional -->
-                    <div class="about__box">
-                        <i class='bx bx-support about__icon'></i>
-                        <h3 class="about__title">Support</h3>
-                        <span class="about__subtitle">Online 24/7</span>
-                    </div>
-
+      </section>
+      <div class="chapter-divider section-shell">
+        <span class="mono">THE WORK</span
+        ><span class="divider-line" aria-hidden="true"></span
+        ><span class="mono">SCROLL TO EXPLORE ↓</span>
+      </div>
+      <section
+        class="work-section light-section"
+        id="work"
+        aria-labelledby="work-title"
+      >
+        <div class="section-shell">
+          <div class="section-intro">
+            <p class="eyebrow">01 / Selected work</p>
+            <h2 id="work-title">
+              Wide scope.<br /><span class="quiet">Deep ownership.</span>
+            </h2>
+            <p class="section-lede">
+              The problems I gravitate toward cross boundaries. My job is to
+              make the whole system work—and keep it understandable.
+            </p>
+          </div>
+          <article class="work-feature reveal">
+            <div class="work-feature-copy">
+              <div class="work-meta mono">
+                <span>01</span><span>PLATFORM ENGINEERING</span
+                ><span>CISCO</span>
+              </div>
+              <h3>From first boot<br />to a complete platform.</h3>
+              <p>
+                Delivered Secure Firewall platform bring-up as the sole engineer
+                executing scope spanning 4+ teams. Firmware, FXOS, switching and
+                PHY hardware, applications, datapath, and QDMA—all connected by
+                one continuous thread of ownership.
+              </p>
+              <p class="work-note">
+                Implementation. Build verification. Device validation.
+                Follow-through at every boundary.
+              </p>
+              <ul class="tag-list" aria-label="Technologies">
+                <li>C / C++</li>
+                <li>Linux / FXOS</li>
+                <li>QDMA</li>
+                <li>Platform architecture</li>
+              </ul>
+            </div>
+            <div class="scope-figure">
+              <div class="scope-number">4<span>+</span></div>
+              <p>teams’ scope.<br />One engineer connecting it.</p>
+              <div
+                class="scope-route"
+                aria-label="Platform delivery from firmware to applications"
+              >
+                <span>FIRMWARE</span><i aria-hidden="true"></i
+                ><span>OS + NETWORK</span><i aria-hidden="true"></i
+                ><span>APPLICATIONS</span>
+              </div>
+              <span class="scope-caption mono"
+                >PLATFORM BRING-UP / END TO END</span
+              >
+            </div>
+          </article>
+          <div class="work-grid">
+            <article class="work-item reveal">
+              <div class="work-meta mono">
+                <span>02</span><span>SECURE DELIVERY</span>
+              </div>
+              <div class="work-symbol" aria-hidden="true">
+                <svg viewBox="0 0 70 70" fill="none">
+                  <path d="M35 8 57 17v20c0 13-22 25-22 25S13 50 13 37V17Z" />
+                  <path d="m25 33 7 7 15-15" />
+                </svg>
+              </div>
+              <h3>Trust starts<br />before release.</h3>
+              <p>
+                Own Build Environment Security work supporting federal
+                compliance requirements. Work across secure firmware builds,
+                signature validation, artifact traceability, and post-quantum
+                signing capabilities.
+              </p>
+              <div class="item-foot mono">BES / FIRMWARE SIGNING / PQC</div>
+            </article>
+            <article class="work-item reveal">
+              <div class="work-meta mono">
+                <span>03</span><span>CRITICAL SECURITY</span>
+              </div>
+              <div class="work-symbol" aria-hidden="true">
+                <svg viewBox="0 0 70 70" fill="none">
+                  <path d="M13 35h44M35 13v44" />
+                  <circle cx="35" cy="35" r="22" />
+                  <circle cx="35" cy="35" r="10" />
+                </svg>
+              </div>
+              <h3>On the firewall<br />OS side of Glasswing.</h3>
+              <p>
+                Contributed to Project Glasswing from Cisco’s next-generation
+                firewall OS team, fixing critical vulnerabilities.
+              </p>
+              <div class="item-foot mono">
+                CISCO / NEXT-GENERATION FIREWALL OS
+              </div>
+            </article>
+            <article class="work-item reveal">
+              <div class="work-meta mono">
+                <span>04</span><span>SYSTEMS PERFORMANCE</span>
+              </div>
+              <div class="work-symbol" aria-hidden="true">
+                <svg viewBox="0 0 70 70" fill="none">
+                  <path d="M12 13v44h46M19 40l10-12 11 6 15-20" />
+                  <path d="M46 14h9v9" />
+                </svg>
+              </div>
+              <h3>Less overhead.<br />More understanding.</h3>
+              <p>
+                Consolidated Service Manager architecture to improve memory
+                efficiency. Pair performance work with architecture
+                documentation that helps maintainers reason about the system and
+                build on it.
+              </p>
+              <div class="item-foot mono">
+                APPLICATION MANAGEMENT / MAINTAINABILITY
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+      <section
+        class="approach-section section-shell"
+        id="approach"
+        aria-labelledby="approach-title"
+      >
+        <div class="approach-heading">
+          <p class="eyebrow">02 / How I work</p>
+          <h2 id="approach-title">
+            The work isn’t done<br />until it
+            <span class="italic-word">holds up.</span>
+          </h2>
+          <p>
+            Good engineering is what survives the build, the review, the device,
+            and the handoff to someone else.
+          </p>
+        </div>
+        <div class="delivery-track" aria-label="My engineering process">
+          <div class="track-line" aria-hidden="true"></div>
+          <article class="process-step">
+            <span class="step-point" aria-hidden="true"></span
+            ><span class="mono">01 / UNDERSTAND</span>
+            <h3>Find the real problem.</h3>
+            <p>
+              Trace failures across boundaries. Get close to the system before
+              deciding where the fix belongs.
+            </p>
+          </article>
+          <article class="process-step">
+            <span class="step-point" aria-hidden="true"></span
+            ><span class="mono">02 / BUILD</span>
+            <h3>Own the implementation.</h3>
+            <p>
+              Work across the stack. Make deliberate tradeoffs and leave a
+              design others can follow.
+            </p>
+          </article>
+          <article class="process-step">
+            <span class="step-point" aria-hidden="true"></span
+            ><span class="mono">03 / VALIDATE</span>
+            <h3>Follow it to the device.</h3>
+            <p>
+              Carry changes through review, build checks, artifact inspection,
+              and device validation.
+            </p>
+          </article>
+          <article class="process-step">
+            <span class="step-point" aria-hidden="true"></span
+            ><span class="mono">04 / MULTIPLY</span>
+            <h3>Make the next pass easier.</h3>
+            <p>
+              Turn the work into reusable tools, clear documentation, and
+              practical coaching for teammates.
+            </p>
+          </article>
+        </div>
+        <div class="leadership-note reveal">
+          <span class="note-mark" aria-hidden="true">↗</span>
+          <div>
+            <p class="eyebrow">Technical leadership / AI for SDLC</p>
+            <h3>Useful tools become<br />stronger engineering habits.</h3>
+          </div>
+          <div>
+            <p>
+              I build AI-assisted workflows for investigation, code review,
+              build verification, and device validation. I also lead US Firewall
+              participation in cross-team AI-for-SDLC discussions, coach
+              colleagues, and publish architecture and onboarding resources.
+            </p>
+            <p class="muted">
+              The goal is practical: help people work through difficult problems
+              with better judgment and a repeatable process.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section
+        class="about-section light-section"
+        id="about"
+        aria-labelledby="about-title"
+      >
+        <div class="section-shell about-grid">
+          <div class="portrait-column">
+            <div class="portrait-frame">
+              <img
+                src="/assets/img/about.jpg"
+                alt="Vidhyut Gopinath"
+                width="319"
+                height="529"
+                loading="lazy"
+              /><span class="portrait-corner" aria-hidden="true">VG /</span>
+            </div>
+            <p class="mono portrait-caption">
+              VIDHYUT GOPINATH<br />ENGINEER · TEAMMATE · BUILDER
+            </p>
+          </div>
+          <div class="about-copy">
+            <p class="eyebrow">03 / The person behind the work</p>
+            <h2 id="about-title">
+              Technically deep.<br /><span class="quiet">Human, always.</span>
+            </h2>
+            <p class="about-lede">
+              I care about delivering what I set out to do—and about the people
+              doing it with me.
+            </p>
+            <p>
+              Before systems engineering, I worked with customers at AT&T and
+              Microsoft. Listening closely, explaining unfamiliar technology,
+              and teaching coding and robotics workshops shaped how I work with
+              people today.
+            </p>
+            <p>
+              At Cisco, that becomes hands-on ownership, thoughtful technical
+              reviews, coaching, and documentation that makes a teammate’s next
+              step clearer. I’m building my career around dependable systems and
+              stronger teams.
+            </p>
+            <div class="education-line">
+              <span class="mono">EDUCATION</span>
+              <p>
+                Software Engineering, Bachelor’s degree<br /><span
+                  >San José State University · 2023</span
+                >
+              </p>
+            </div>
+          </div>
+          <div class="career">
+            <div class="career-heading">
+              <h3>A path built<br />through practice.</h3>
+              <p class="mono">EXPERIENCE / 2017—PRESENT</p>
+            </div>
+            <ol class="career-list">
+              <li>
+                <span class="career-date mono">NOV 2024 — NOW</span>
+                <div>
+                  <h4>
+                    Software Engineer III
+                    <span class="promotion-badge">Promoted</span>
+                  </h4>
+                  <p>Cisco · Secure Firewall</p>
                 </div>
-                <!-- change -->
-                <p class="about__description">
-                    I am currently a student of Software Engineering at San Jose State University. Day trading and cryptocurrencies are always on the dock. I am also a vigilant FromSoftware admirer.
+              </li>
+              <li>
+                <span class="career-date mono">JAN 2023 — NOV 2024</span>
+                <div>
+                  <h4>Software Engineer II</h4>
+                  <p>Cisco · Platform software</p>
+                </div>
+              </li>
+              <li>
+                <span class="career-date mono">JUN — AUG 2022</span>
+                <div>
+                  <h4>Software Engineer Intern</h4>
+                  <p>Cisco · FXOS platform software</p>
+                </div>
+              </li>
+              <li>
+                <span class="career-date mono">SEP 2017 — APR 2022</span>
+                <div>
+                  <h4>Business Sales Expert</h4>
+                  <p>AT&T · Customer relationships & business solutions</p>
+                </div>
+              </li>
+              <li>
+                <span class="career-date mono">SEP 2017 — SEP 2018</span>
+                <div>
+                  <h4>Product Advisor</h4>
+                  <p>Microsoft · Technical support & community education</p>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+      <section
+        class="projects-section section-shell"
+        id="projects"
+        aria-labelledby="projects-title"
+      >
+        <div class="projects-heading">
+          <div>
+            <p class="eyebrow">04 / Earlier builds</p>
+            <h2 id="projects-title">Where the web<br />met the system.</h2>
+          </div>
+          <p>
+            Earlier full-stack projects that built my foundation in interfaces,
+            application logic, and working with others.
+          </p>
+        </div>
+        <div class="projects-grid">
+          <a
+            class="project-card"
+            href="https://github.com/VidhyutG/UnisellSite"
+            target="_blank"
+            rel="noopener"
+            ><div class="project-preview">
+              <div class="browser-bar" aria-hidden="true">
+                <i></i><i></i><i></i><span>UNISELL / COMMERCE</span>
+              </div>
+              <img
+                src="/assets/img/unisell.webp"
+                alt="Interface from the Unisell commerce project"
+                loading="lazy"
+                width="1100"
+                height="619"
+              />
+            </div>
+            <div class="project-copy">
+              <div>
+                <span class="mono">FULL-STACK COMMERCE</span>
+                <h3>Unisell</h3>
+                <p>
+                  React on the front. Node.js, Express, and MongoDB behind it.
                 </p>
-
-                <a href="#contact" class="button">Contact Me</a>
+              </div>
+              <span class="project-arrow" aria-hidden="true">↗</span>
             </div>
+            <span class="project-source mono">VIEW REPOSITORY</span></a
+          ><a
+            class="project-card"
+            href="https://github.com/VidhyutG/StudyAid"
+            target="_blank"
+            rel="noopener"
+            ><div class="project-preview">
+              <div class="browser-bar" aria-hidden="true">
+                <i></i><i></i><i></i
+                ><span>STUDYAID / STUDENT PRODUCTIVITY</span>
+              </div>
+              <img
+                src="/assets/img/studyaid.webp"
+                alt="Interface from the StudyAid student productivity project"
+                loading="lazy"
+                width="1100"
+                height="629"
+              />
+            </div>
+            <div class="project-copy">
+              <div>
+                <span class="mono">COLLABORATIVE STUDENT PROJECT</span>
+                <h3>StudyAid</h3>
+                <p>
+                  A team project designed around notes, flashcards, and
+                  collaborative learning.
+                </p>
+              </div>
+              <span class="project-arrow" aria-hidden="true">↗</span>
+            </div>
+            <span class="project-source mono">VIEW REPOSITORY</span></a
+          >
         </div>
-    </section>
-
-    <!--=============== SKILLS ===============-->
-    <section class="skills section" id="skills">
-        <span class="section__subtitle">My abilities</span>
-        <h2 class="section__title">My Experience</h2>
-
-        <div class="skills__container container grid">
-            <div class="skills__content">
-                <h3 class="skills__title">Frontend developer</h3>
-
-                <div class="skills__box">
-                    <div class="skills__group">
-                        <div class="skills__data">
-                            <i class='bx bxs-badge-check'></i>
-
-                            <div>
-                                <h3 class="skills__name">HTML</h3>
-                                <span class="skills__level">Experienced</span>
-                            </div>
-                        </div>
-
-                        <div class="skills__data">
-                            <i class='bx bxs-badge-check'></i>
-
-                            <div>
-                                <h3 class="skills__name">CSS</h3>
-                                <span class="skills__level">Experienced</span>
-                            </div>
-                        </div>
-
-                        <div class="skills__data">
-                            <i class='bx bxs-badge-check'></i>
-
-                            <div>
-                                <h3 class="skills__name">JavaScript</h3>
-                                <span class="skills__level">Intermediate</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="skills__group">
-                        <div class="skills__data">
-                            <i class='bx bxs-badge-check'></i>
-
-                            <div>
-                                <h3 class="skills__name">Bootstrap</h3>
-                                <span class="skills__level">Experienced</span>
-                            </div>
-                        </div>
-
-                        <div class="skills__data">
-                            <i class='bx bxs-badge-check'></i>
-
-                            <div>
-                                <h3 class="skills__name">Git</h3>
-                                <span class="skills__level">Experienced</span>
-                            </div>
-                        </div>
-
-                        <div class="skills__data">
-                            <i class='bx bxs-badge-check'></i>
-
-                            <div>
-                                <h3 class="skills__name">React JS</h3>
-                                <span class="skills__level">Intermediate</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      </section>
+      <section
+        class="contact-section"
+        id="contact"
+        aria-labelledby="contact-title"
+      >
+        <div class="section-shell">
+          <div class="contact-top">
+            <p class="eyebrow">
+              <span class="status-dot" aria-hidden="true"></span> A good
+              conversation is a good start.
+            </p>
+            <a
+              href="/resume/Vidhyut_Gopinath_Resume_2026.pdf"
+              target="_blank"
+              rel="noopener"
+              class="text-link"
+              >View résumé <span aria-hidden="true">↗</span></a
+            >
+          </div>
+          <a class="contact-title-link" href="mailto:vidhyutap@gmail.com"
+            ><h2 id="contact-title">
+              Let’s build<br />something
+              <span class="italic-word">that lasts.</span>
+            </h2>
+            <span aria-hidden="true">↗</span></a
+          >
+          <div class="contact-bottom">
+            <div class="email-group">
+              <a href="mailto:vidhyutap@gmail.com">vidhyutap@gmail.com</a
+              ><button
+                class="copy-email"
+                type="button"
+                aria-label="Copy email address"
+              >
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="8" y="8" width="12" height="12" rx="2" />
+                  <path d="M15 8V4H4v11h4" /></svg
+                ><span class="copy-status" role="status"></span>
+              </button>
             </div>
-
-            <div class="skills__content">
-                <h3 class="skills__title">Backend Developer</h3>
-
-                <div class="skills__box">
-                    <div class="skills__group">
-                        <div class="skills__data">
-                            <i class='bx bxs-badge-check'></i>
-
-                            <div>
-                                <h3 class="skills__name">Java</h3>
-                                <span class="skills__level">Experienced</span>
-                            </div>
-                        </div>
-
-                        <div class="skills__data">
-                            <i class='bx bxs-badge-check'></i>
-
-                            <div>
-                                <h3 class="skills__name">Node JS</h3>
-                                <span class="skills__level">Intermediate</span>
-                            </div>
-                        </div>
-
-                        <div class="skills__data">
-                            <i class='bx bxs-badge-check'></i>
-
-                            <div>
-                                <h3 class="skills__name">Python</h3>
-                                <span class="skills__level">Experienced</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="skills__group">
-                        <div class="skills__data">
-                            <i class='bx bxs-badge-check'></i>
-
-                            <div>
-                                <h3 class="skills__name">MySQL</h3>
-                                <span class="skills__level">Experienced</span>
-                            </div>
-                        </div>
-                        <div class="skills__group">
-                            <div class="skills__data">
-                                <i class='bx bxs-badge-check'></i>
-
-                                <div>
-                                    <h3 class="skills__name">MongoDB</h3>
-                                    <span class="skills__level">Experienced</span>
-                                </div>
-                            </div>
-                            <div class="skills__group">
-                                <div class="skills__data">
-                                    <i class='bx bxs-badge-check'></i>
-
-                                    <div>
-                                        <h3 class="skills__name">Express</h3>
-                                        <span class="skills__level">Experienced</span>
-                                    </div>
-                                </div>
-                    </div>
-                </div>
+            <div class="social-links">
+              <a
+                href="https://www.linkedin.com/in/vidhyut-gopinath-2a7306155/"
+                target="_blank"
+                rel="noopener"
+                >LinkedIn ↗</a
+              ><a
+                href="https://github.com/VidhyutG"
+                target="_blank"
+                rel="noopener"
+                >GitHub ↗</a
+              >
             </div>
+          </div>
         </div>
-    </section>
-
-    <!--=============== SERVICES ===============-->
-    <section class="services section ">
-        <span class="section__subtitle">My Services</span>
-        <h2 class="section__title">What I Offer</h2>
-
-        <div class="services__container container grid">
-            <div class="services__card">
-                <h3 class="services__title">Web <br> Developer</h3>
-
-                <span class="services__button">
-                            See more <i class='bx bx-right-arrow-alt services__icon'></i>
-                        </span>
-
-                <div class="services__modal">
-                    <div class="services__modal-content">
-                        <i class='bx bx-x services__modal-close'></i>
-
-                        <h3 class="services__modal-title">Web Developer</h3>
-                        <p class="services__modal-description">
-                            Developed both frontend and backend functionality
-                        </p>
-
-                        <ul class="services__modal-list">
-                            <li class="services__modal-item">
-                                <i class='bx bx-check services__modal-icon'></i>
-                                <p class="services__modal-info">
-                                    Followed the agile process of development
-                                </p>
-                            </li>
-
-                            <li class="services__modal-item">
-                                <i class='bx bx-check services__modal-icon'></i>
-                                <p class="services__modal-info">
-                                    Collaberated on code using GitHub.
-                                </p>
-                            </li>
-
-                            <!-- <li class="services__modal-item"> -->
-                            <!-- <i class='bx bx-check services__modal-icon' ></i> -->
-                            <!-- <p class="services__modal-info"> -->
-                            <!-- I position your company brand. -->
-                            <!-- </p> -->
-                            <!-- </li> -->
-
-                            <li class="services__modal-item">
-                                <i class='bx bx-check services__modal-icon'></i>
-                                <p class="services__modal-info">
-                                    Designed prototypes of product.
-                                </p>
-                            </li>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="services__card">
-                <h3 class="services__title">UX/UI <br> Designer</h3>
-
-                <span class="services__button">
-                            See more <i class='bx bx-right-arrow-alt services__icon'></i>
-                        </span>
-
-                <div class="services__modal">
-                    <div class="services__modal-content">
-                        <i class='bx bx-x services__modal-close'></i>
-
-                        <h3 class="services__modal-title">UX/UI Designer</h3>
-                        <p class="services__modal-description">
-                            I develop the entire user interface.
-                        </p>
-
-                        <ul class="services__modal-list">
-
-                            <li class="services__modal-item">
-                                <i class='bx bx-check services__modal-icon'></i>
-                                <p class="services__modal-info">
-                                    collaberate on designing the user experience.
-                                </p>
-                            </li>
-
-                            <li class="services__modal-item">
-                                <i class='bx bx-check services__modal-icon'></i>
-                                <p class="services__modal-info">
-                                    Designed modular frontend of Web Application.
-                                </p>
-                            </li>
-
-                            <li class="services__modal-item">
-                                <i class='bx bx-check services__modal-icon'></i>
-                                <p class="services__modal-info">
-                                    I create ux element.
-                                </p>
-                            </li>
-
-                            <!-- <li class="services__modal-item"> -->
-                            <!-- <i class='bx bx-check services__modal-icon' ></i> -->
-                            <!-- <p class="services__modal-info"> -->
-                            <!-- I position your company brand. -->
-                            <!-- </p> -->
-                            <!-- </li> -->
-
-                            <li class="services__modal-item">
-                                <i class='bx bx-check services__modal-icon'></i>
-                                <p class="services__modal-info">
-                                    Design and mockups of products.
-                                </p>
-                            </li>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!--=============== WORK ===============-->
-    <section class="work section" id="work">
-        <span class="section__subtitle">My Portfolio</span>
-        <h2 class="section__title">Recent Works</h2>
-
-        <div class="work__filters">
-            <span class="work__item active-work" data-filter='all'>All</span>
-            <span class="work__item" data-filter='.web'>Web</span>
-            <span class="work__item" data-filter='.mobile'>E-commerce</span>
-            <!--  <span class="work__item" data-filter='.design'>Design</span>-->
-        </div>
-        <!-- Web -->
-        <div class="work__container container grid">
-
-            <div class="work__card mix web">
-                <img src="assets/img/work1.png" alt="" class="work__img">
-
-                <h3 class="work__title">Productivity Website for Students</h3>
-
-                <a href="https://github.com/VidhyutG/StudyAid" class="work__button">
-                    GitHub <i class='bx bx-right-arrow-alt work__icon'></i>
-                </a>
-            </div>
-
-            <!-- Mobile -->
-            <div class="work__card mix mobile">
-                            <img src="assets/img/work2.png" alt="" class="work__img">
-
-                            <h3 class="work__title">Unisell(MERN)</h3>
-
-                            <a href="https://github.com/VidhyutG/UnisellSite" class="work__button">
-                                GitHub <i class='bx bx-right-arrow-alt work__icon'></i>
-                            </a>
-                        </div>
-
-
-
-            <!-- Design -->
-
-            <!--            <div class="work__card mix design">-->
-            <!--                <img src="assets/img/work3.jpg" alt="" class="work__img">-->
-
-            <!--                <h3 class="work__title">Brand design</h3>-->
-
-            <!--                <a href="" class="work__button">-->
-            <!--                    Demo <i class='bx bx-right-arrow-alt work__icon'></i>-->
-            <!--                </a>-->
-            <!--            </div>-->
-
-
-    </section>
-
-    <!--=============== TESTIMONIALS ===============-->
-
-    <!-- <section class="testimonial section">
-         <span class="section__subtitle">My clients say</span>
-         <h2 class="section__title">Testimonial</h2>
-
-         <div class="testimonial__container container swiper">
-             <div class="swiper-wrapper">
-                 <div class="testimonial__card swiper-slide">
-                     <img src="assets/img/testimonial1.png" alt="" class="testimonial__img">
-
-                     <h3 class="testimonial__name">Jhon Doe</h3>
-                     <p class="testimonial__description">
-                         A really good job, all aspects of the project were
-                         followed step by step and with good results.
-                     </p>
-                 </div>
-
-                 <div class="testimonial__card swiper-slide">
-                     <img src="assets/img/testimonial2.png" alt="" class="testimonial__img">
-
-                     <h3 class="testimonial__name">Paula Vusy</h3>
-                     <p class="testimonial__description">
-                         A really good job, all aspects of the project were
-                         followed step by step and with good results.
-                     </p>
-                 </div>
-
-                 <div class="testimonial__card swiper-slide">
-                     <img src="assets/img/testimonial3.png" alt="" class="testimonial__img">
-
-                     <h3 class="testimonial__name">Sara Cill</h3>
-                     <p class="testimonial__description">
-                         A really good job, all aspects of the project were
-                         followed step by step and with good results.
-                     </p>
-                 </div>
-             </div>
-
-             <div class="swiper-pagination"></div>
-         </div>
-     </section>-->
-
-    <!--=============== CONTACT ===============-->
-    <section class="contact section" id="contact">
-        <span class="section__subtitle">Get in touch</span>
-        <h2 class="section__title">Contact Me</h2>
-
-        <div class="contact__container container grid">
-            <div class="contact__content">
-                <h3 class="contact__title">Talk to me</h3>
-                <div class="contact__info">
-
-                    <div class="contact__card">
-                        <i class='bx bx-mail-send contact__card-icon'></i>
-                        <h3 class="contact__card-title">Email</h3>
-                        <span class="contact__card-data">vidhyutap@gmail.com</span>
-
-                        <!-- Insert your original email -->
-                        <a href="mailto:vidhyutap@gmail.com" class="contact__button">
-                            Send a message <i class='bx bx-right-arrow-alt contact__button-icon'></i>
-                        </a>
-                    </div>
-
-                    <div class="contact__card">
-                        <i class='bx bxl-whatsapp contact__card-icon'></i>
-                        <h3 class="contact__card-title">WhatsApp</h3>
-                        <span class="contact__card-data">+1 408-204-3970</span>
-
-                        <!-- Insert a real number plus country code -->
-                        <a href="https://api.whatsapp.com/send?phone=+14082043970"
-                           class="contact__button">
-                            Send a message <i class='bx bx-right-arrow-alt contact__button-icon'></i>
-                        </a>
-                    </div>
-
-
-                </div>
-            </div>
-
-            <div class="contact__content">
-                <h3 class="contact__title">Inactive Form</h3>
-
-                <form action="" class="contact__form">
-                    <div class="contact__form-div">
-                        <label class="contact__form-tag">Name</label>
-                        <input type="text" placeholder="Insert your name" class="contact__form-input">
-                    </div>
-
-                    <div class="contact__form-div">
-                        <label class="contact__form-tag">Email</label>
-                        <input type="email" placeholder="Insert your email" class="contact__form-input">
-                    </div>
-
-                    <div class="contact__form-div contact__form-area">
-                        <label class="contact__form-tag">Message Box</label>
-                        <textarea name="" id="" cols="30" rows="10" placeholder="Type what you have in mind"
-                                  class="contact__form-input"></textarea>
-                    </div>
-
-                    <button class="button">Send Message</button>
-                </form>
-            </div>
-
-
-        </div>
-    </section>
-</main>
-
-<!--=============== FOOTER ===============-->
-<footer class="footer">
-    <div class="footer__container container">
-        <h1 class="footer__title">Vidhyut Inc.</h1>
-
-        <ul class="footer__list">
-            <li>
-                <a href="#about" class="footer__link">About</a>
-            </li>
-            <li>
-                <a href="#work" class="footer__link">Projects</a>
-            </li>
-
-            <!--            <li>-->
-            <!--                <a href="#testimonial" class="footer__link">Testimonials</a>-->
-            <!--            </li>-->
-
-        </ul>
-
-        <ul class="footer__social">
-            <a href="https://www.facebook.com/vjokrs/" class="footer__social-link">
-                <i class='bx bxl-facebook'></i>
-            </a>
-
-            <a href="https://www.instagram.com/xxvidyuthxx/" class="footer__social-link">
-                <i class='bx bxl-instagram'></i>
-            </a>
-
-            <a href="https://twitter.com/vidhyutgopinath" class="footer__social-link">
-                <i class='bx bxl-twitter'></i>
-            </a>
-
-            <a href="https://steamcommunity.com/profiles/76561198195507205/" class="footer__social-link">
-                <i class='bx bxl-steam'></i>
-            </a>
-
-
-        </ul>
-
-        <span class="footer__copy">
-                    &#169; Vidhyut Developer Club. All rights reserved.
-                </span>
-    </div>
-</footer>
-
-<!--=============== SCROLLREVEAL ===============-->
-<script src="assets/js/scrollreveal.min.js"></script>
-
-<!--=============== SWIPER JS ===============-->
-<script src="assets/js/swiper-bundle.min.js"></script>
-
-<!--=============== MIXITUP FILTER ===============-->
-<script src="assets/js/mixitup.min.js"></script>
-
-<!--=============== MAIN JS ===============-->
-<script src="assets/js/main.js"></script>
-
-
-</body>
+      </section>
+    </main>
+    <footer class="site-footer section-shell">
+      <p>© <span id="year">2026</span> Vidhyut Gopinath</p>
+      <p class="footer-credit">Crafted with Codex + Astra.</p>
+      <a href="#home">Back to top ↑</a>
+    </footer>
+  </body>
 </html>
