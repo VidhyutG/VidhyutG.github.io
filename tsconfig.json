@@ -10,5 +10,5 @@
     "noEmit": true,
     "skipLibCheck": true
   },
-  "include": ["assets/js/portfolio.js"]
+  "include": ["assets/js/portfolio.js", "assets/js/projection.js"]
 }

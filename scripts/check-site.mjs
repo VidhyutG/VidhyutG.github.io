@@ -28,6 +28,25 @@ for (const [tag] of html.matchAll(/<button\b[^>]*>/gs))
 assert(!html.includes("ShohinResume"), "Unrelated legacy resume is linked");
 assert(!html.includes("Online 24/7"), "Stale template content remains");
 assert(!html.includes("docs.google.com/document"), "Old resume link remains");
+// These breaks disappear on mobile; whitespace must remain in the actual text.
+for (const heading of [
+  "Trust starts before release.",
+  "On the firewall OS side of Glasswing.",
+  "Less overhead. More understanding.",
+]) {
+  const renderedHeadings = [
+    ...html.matchAll(/<h3\b[^>]*>([\s\S]*?)<\/h3>/g),
+  ].map((match) =>
+    match[1]
+      .replace(/<[^>]*>/g, "")
+      .replace(/\s+/g, " ")
+      .trim(),
+  );
+  assert(
+    renderedHeadings.includes(heading),
+    `Heading loses mobile word spacing: ${heading}`,
+  );
+}
 const resume = readFileSync(
   resolve(root, "resume/Vidhyut_Gopinath_Resume_2026.pdf"),
 );

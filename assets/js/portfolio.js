@@ -1,3 +1,5 @@
+import { initProjection } from "./projection.js";
+
 // The content and links work without JavaScript; interactions enhance them.
 const root = document.documentElement;
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -27,9 +29,9 @@ function setTheme(theme) {
   );
   document
     .querySelector('meta[name="theme-color"]')
-    ?.setAttribute("content", theme === "dark" ? "#101613" : "#e8ece5");
+    ?.setAttribute("content", theme === "dark" ? "#101a29" : "#e6eff8");
 }
-setTheme(readPreference("vg-theme") === "light" ? "light" : "dark");
+setTheme(readPreference("vg-theme") === "dark" ? "dark" : "light");
 themeButton?.addEventListener("click", () => {
   const theme = root.dataset.theme === "dark" ? "light" : "dark";
   setTheme(theme);
@@ -109,31 +111,35 @@ layerButtons.forEach((button, index) => {
     if (nextButton instanceof HTMLElement) nextButton.focus();
   });
 });
-const motionButton = document.querySelector(".motion-toggle");
+const motionButtons = [...document.querySelectorAll(".motion-toggle")];
 let motionPaused =
   readPreference("vg-motion") === "paused" || reducedMotion.matches;
 function applyMotionPreference() {
   root.dataset.motion = motionPaused ? "paused" : "running";
-  motionButton?.setAttribute("aria-pressed", String(motionPaused));
-  if (motionButton instanceof HTMLButtonElement) {
-    motionButton.disabled = reducedMotion.matches;
-    if (reducedMotion.matches) {
-      motionButton.textContent = "Reduced motion";
-      motionButton.title = "Following your device’s reduced-motion setting";
-      return;
+  motionButtons.forEach((motionButton) => {
+    motionButton?.setAttribute("aria-pressed", String(motionPaused));
+    if (motionButton instanceof HTMLButtonElement) {
+      motionButton.disabled = reducedMotion.matches;
+      if (reducedMotion.matches) {
+        motionButton.textContent = "Reduced motion";
+        motionButton.title = "Following your device’s reduced-motion setting";
+        return;
+      }
+      motionButton.title = "Control decorative motion";
     }
-    motionButton.title = "Control decorative motion";
-  }
-  if (motionButton)
-    motionButton.innerHTML = `<span class="motion-icon" aria-hidden="true">${motionPaused ? "▷" : "Ⅱ"}</span> ${motionPaused ? "Resume motion" : "Pause motion"}`;
+    if (motionButton)
+      motionButton.innerHTML = `<span class="motion-icon" aria-hidden="true">${motionPaused ? "▷" : "Ⅱ"}</span> ${motionPaused ? "Resume motion" : "Pause motion"}`;
+  });
 }
 applyMotionPreference();
-motionButton?.addEventListener("click", () => {
-  if (reducedMotion.matches) return;
-  motionPaused = !motionPaused;
-  savePreference("vg-motion", motionPaused ? "paused" : "running");
-  applyMotionPreference();
-});
+motionButtons.forEach((motionButton) =>
+  motionButton.addEventListener("click", () => {
+    if (reducedMotion.matches) return;
+    motionPaused = !motionPaused;
+    savePreference("vg-motion", motionPaused ? "paused" : "running");
+    applyMotionPreference();
+  }),
+);
 reducedMotion.addEventListener("change", (event) => {
   motionPaused = event.matches || readPreference("vg-motion") === "paused";
   applyMotionPreference();
@@ -233,3 +239,4 @@ copyButton?.addEventListener("click", async () => {
 });
 const year = document.querySelector("#year");
 if (year) year.textContent = String(new Date().getFullYear());
+initProjection();
