@@ -1,6 +1,6 @@
 # Vidhyut Gopinath — portfolio
 
-Personal portfolio for Vidhyut Gopinath, Software Engineer III at Cisco Secure Firewall.
+Personal portfolio for Vidhyut Gopinath, Software Engineer IV at Cisco Secure Firewall. Promotion effective November 1, 2026.
 
 ## Development
 
