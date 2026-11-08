@@ -28,25 +28,18 @@ for (const [tag] of html.matchAll(/<button\b[^>]*>/gs))
 assert(!html.includes("ShohinResume"), "Unrelated legacy resume is linked");
 assert(!html.includes("Online 24/7"), "Stale template content remains");
 assert(!html.includes("docs.google.com/document"), "Old resume link remains");
-// These breaks disappear on mobile; whitespace must remain in the actual text.
-for (const heading of [
-  "Trust starts before release.",
-  "On the firewall OS side of Glasswing.",
-  "Less overhead. More understanding.",
-]) {
-  const renderedHeadings = [
-    ...html.matchAll(/<h3\b[^>]*>([\s\S]*?)<\/h3>/g),
-  ].map((match) =>
-    match[1]
-      .replace(/<[^>]*>/g, "")
-      .replace(/\s+/g, " ")
-      .trim(),
-  );
+// Preserve meaningful word boundaries when headline spans and breaks reflow.
+for (const heading of html.matchAll(/<h[1-4]\b[^>]*>([\s\S]*?)<\/h[1-4]>/g)) {
   assert(
-    renderedHeadings.includes(heading),
-    `Heading loses mobile word spacing: ${heading}`,
+    !/[a-z]<span[^>]*>[a-z]/.test(heading[1]),
+    "Missing word boundary at heading span",
   );
 }
+assert(html.includes("NOV 2026 — PRESENT"), "Current role date missing");
+assert(
+  !html.includes("promotion effective"),
+  "Future promotion wording remains",
+);
 const resume = readFileSync(
   resolve(root, "resume/Vidhyut_Gopinath_Resume_2026.pdf"),
 );

@@ -1,10 +1,28 @@
-# Vidhyut Gopinath — portfolio
+# Vidhyut Gopinath — From the board up
 
-Personal portfolio for Vidhyut Gopinath, Software Engineer IV at Cisco Secure Firewall. Promotion effective November 1, 2026.
+Personal portfolio for Vidhyut Gopinath, Software Engineer IV at Cisco Secure Firewall since November 2026.
+
+## Design direction
+
+A custom hardware-inspired identity in Sky Blue, silver, and midnight navy. A CSS 3D exploded platform introduces the work; its VG particle signature responds to pointer, touch, and keyboard input. Visitors can assemble the platform and isolate hardware, platform OS, or security. The model is explicitly conceptual, not proprietary Cisco architecture.
+
+The content moves from current platform bring-up to measured engineering outcomes, organizational AI-native engineering work, and career context. No invented project claims, grades, promotion-speed comparisons, or confidential architecture. Glasswing remains limited to the authorized general contribution statement.
+
+Research informed the redesign, accessed November 7, 2026:
+
+- [Linear](https://linear.app/): specific work presented with visual product demonstrations and clear hierarchy.
+- [Teenage Engineering](https://teenage.engineering/): distinctive hardware identity and product-focused presentation.
+- [Lusion](https://lusion.co/): interaction and spatial storytelling as part of the identity.
+- [WebKit: scroll-driven animations](https://webkit.org/blog/17101/a-guide-to-scroll-driven-animations-with-just-css/): native scroll timelines, progressive enhancement, and reduced-motion preferences.
+- [Chrome: scrollytelling guidance](https://developer.chrome.com/docs/modern-web-guidance/guides/ui-behaviors/scrollytelling): scroll-linked presentation without taking over native scrolling.
+- [MDN: transform-style](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/transform-style): preserving nested 3D geometry; avoiding flattening on the model ancestors.
+- [W3C reduced-motion technique](https://www.w3.org/WAI/WCAG22/Techniques/css/C39.html): honoring motion preferences.
+
+This is an original composition, not a reproduction of a reference site. No claim is made to represent every current design trend.
 
 ## Development
 
-Requires Node 22.12+ (or a supported newer LTS).
+Requires Node 22.12+ or a supported newer LTS.
 
 ```sh
 npm ci
@@ -13,20 +31,20 @@ npm run check
 npm run build
 ```
 
-The production build is generated in `dist/`. The repository root is also a complete static site, preserving the existing GitHub Pages branch deployment. `.nojekyll` prevents template processing. No runtime services or secrets are required.
+GitHub Pages serves `main` at the repository root. `.nojekyll` prevents template processing. The root remains a complete static site; Vite also generates a production bundle in `dist/`. No runtime framework, WebGL dependency, server, analytics, or secrets are shipped.
 
-The source is semantic HTML, CSS layers and media queries, and type-checked JavaScript with JSDoc. Vite provides development and production bundling. No component framework is shipped to visitors.
+## Source
 
-## Editing
+- `index.html`: semantic content, metadata, abstract board artwork, native expandable case studies.
+- `assets/css/portfolio.css`: layout, CSS 3D model, responsive rules, progressive scroll animations.
+- `assets/js/portfolio.js`: motion preferences, layer selection, assembly, pointer tilt.
+- `assets/js/projection.js`: capped-density particle canvas; rendering stops offscreen, while hidden, or paused.
+- `assets/fonts/`: self-hosted Google Fonts with their OFL licenses.
+- `assets/img/social-preview.png`: social share card. Its source is `scripts/build-social.py` (Pillow; downloads the display font temporarily).
+- `resume/` and `public/resume/`: identical current PDF, retained for root Pages and Vite output.
 
-- Content and metadata: `index.html`
-- Theme, layout, responsive behavior and motion: `assets/css/portfolio.css`
-- Engineering diagram, theme, motion controls and scroll progress: `assets/js/portfolio.js`
-- Touch and pointer responsive VG particle projection: `assets/js/projection.js`
-- Resume: update the same PDF in `resume/` and `public/resume/`
+Core content, links, and expandable case studies work without JavaScript. The model has static geometry and the VG canvas has a typographic fallback. Motion starts paused when the OS requests reduced motion; a separate pause control stops ongoing animation. Native vertical scrolling and pinch zoom are preserved. The CSS scroll timeline effects are optional enhancements.
 
-The engineering diagram is a conceptual map of areas of practice, not a representation of proprietary Cisco architecture. Project Glasswing is described only at the general contribution level authorized by Vidhyut. The two earlier projects link to their public repositories; StudyAid is identified as a team project.
+## Content maintenance
 
-Core content and links work without JavaScript. System reduced-motion preferences are respected, and optional local preferences never contain personal data. Project images are served as optimized WebP files; no analytics or tracking scripts are included.
-
-The Sky Blue palette opens in light mode and retains an optional dark mode. The VG canvas responds to pointer movement, horizontal touch gestures, and arrow keys. Native vertical scrolling and pinch zoom remain available. Both motion controls pause the projection and diagram together; rendering also stops when the projection is offscreen or the tab is hidden. A static monogram remains if canvas is unavailable.
+The résumé is the source for existing impact figures. New platform work is described as accelerated bring-up; no unsupported record or speed comparison is published. The 200+ figure is a forum audience, not a management headcount. Keep the résumé date at November 2026–present and retain earlier public projects as earlier work.

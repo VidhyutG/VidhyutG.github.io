@@ -44,7 +44,7 @@ export function initProjection() {
   function seed() {
     if (!maskContext) return;
     maskContext.clearRect(0, 0, 640, 420);
-    maskContext.font = '700 340px "DM Sans", Arial, sans-serif';
+    maskContext.font = '700 340px "Space Grotesk", Arial, sans-serif';
     maskContext.textAlign = "center";
     maskContext.textBaseline = "alphabetic";
     maskContext.fillStyle = "#fff";
@@ -75,8 +75,8 @@ export function initProjection() {
 
   function colors() {
     const light = root.dataset.theme === "light";
-    ink = light ? "#376e9e" : "#bad8f5";
-    glint = light ? "#17476f" : "#f1f8ff";
+    ink = light ? "#b9d9f0" : "#bad8f5";
+    glint = light ? "#f0f9ff" : "#f1f8ff";
   }
 
   function resize() {
@@ -219,8 +219,10 @@ export function initProjection() {
   function pointAt(event) {
     if (!motionAllowed()) return;
     const bounds = field.getBoundingClientRect();
-    const x = event.clientX - bounds.left;
-    const y = event.clientY - bounds.top;
+    const x =
+      ((event.clientX - bounds.left) / Math.max(bounds.width, 1)) * width;
+    const y =
+      ((event.clientY - bounds.top) / Math.max(bounds.height, 1)) * height;
     if (!pointer.active) {
       pointer.previousX = x;
       pointer.previousY = y;
