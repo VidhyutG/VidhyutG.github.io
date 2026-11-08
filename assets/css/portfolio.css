@@ -1425,11 +1425,6 @@ h1 > span {
       animation-timeline: view();
       animation-range: entry 0% entry 65%;
     }
-    :root:not([data-motion="paused"]) .bar-track > span {
-      animation: memory-grow linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 100%;
-    }
   }
 }
 [data-motion="paused"] *,
