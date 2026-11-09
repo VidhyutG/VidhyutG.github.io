@@ -603,7 +603,7 @@ export function generateBoard(seed) {
   const apps = platform.part("B4", "APPS", "block", 46, 16, 55, 23, "WNS");
 
   // ── Layer 3 of 3: secure delivery, one large device. ──────────────────────
-  const signer = security.part("U9", "VG", "signer", 17, 11, 43, 29, "NESW");
+  const signer = security.part("U9", "VIDI", "signer", 17, 11, 43, 29, "NESW");
   security.hole(3, 3);
   security.hole(57, 3);
   security.hole(3, 37);

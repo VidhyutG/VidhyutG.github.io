@@ -1,4 +1,5 @@
 // @ts-check
+import { VIDI_WORDMARK } from "../vidi-brand.js";
 /**
  * The hero exhibit: a routed, three-layer platform drawn as stacked glass.
  *
@@ -17,7 +18,7 @@
 /** @typedef {{traces:Path2D, power:Path2D, pads:Path2D, idlePads:Path2D, dots:Path2D, holes:Path2D, rings:Path2D, wires:Wire[], byId:Map<number, Wire>}} Prepared */
 /** @typedef {{layer:number, wire:Wire, reverse:boolean, start:number, span:number, next:null | (() => void)}} Pulse */
 /** @typedef {{via:number, start:number, span:number, next:null | (() => void)}} ViaPulse */
-/** @typedef {{x:number, y:number, dx:number, dy:number, vx:number, vy:number, phase:number}} Mote */
+/** @typedef {{x:number, y:number, dx:number, dy:number, vx:number, vy:number, phase:number, accent:boolean}} Mote */
 
 const W = 600;
 const H = 400;
@@ -399,26 +400,35 @@ export function createExhibit(stage, hooks = {}) {
     }
   }
 
-  /** Sample the monogram into points that sit on the top chip. */
+  /** Sample the vector identity into points that sit on the top chip. */
   function seedMotes() {
     const mask = document.createElement("canvas");
     mask.width = 640;
-    mask.height = 420;
+    mask.height = 320;
     const m = mask.getContext("2d", { willReadFrequently: true });
     if (!m) return;
-    const family =
-      getComputedStyle(root).getPropertyValue("--display").trim() ||
-      "sans-serif";
-    m.font = `700 330px ${family}`;
-    m.textAlign = "center";
-    m.textBaseline = "alphabetic";
-    m.fillStyle = "#fff";
-    m.fillText("VG", 320, 322);
-    const pixels = m.getImageData(0, 0, 640, 420).data;
-    const fit = Math.min((chip.w * 0.8) / 520, (chip.h * 0.7) / 250);
+    const logoScale = 560 / VIDI_WORDMARK.width;
+    m.setTransform(
+      logoScale,
+      0,
+      0,
+      logoScale,
+      40,
+      (320 - VIDI_WORDMARK.height * logoScale) / 2,
+    );
+    for (const part of VIDI_WORDMARK.paths) {
+      // Red identifies the blue contact in the mask, while alpha defines geometry.
+      m.fillStyle = part.accent ? "#f00" : "#fff";
+      m.fill(new Path2D(part.d), "evenodd");
+    }
+    const pixels = m.getImageData(0, 0, 640, 320).data;
+    const fit = Math.min(
+      (chip.w * 0.84) / 560,
+      (chip.h * 0.7) / (VIDI_WORDMARK.height * logoScale),
+    );
     const previous = motes;
     motes = [];
-    for (let y = 30; y < 390; y += 5)
+    for (let y = 20; y < 300; y += 5)
       for (let x = 30; x < 610; x += 5) {
         if (pixels[(y * 640 + x) * 4 + 3] < 150) continue;
         const noise = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
@@ -426,12 +436,13 @@ export function createExhibit(stage, hooks = {}) {
         const old = previous[motes.length];
         motes.push({
           x: (x - 320) * fit,
-          y: (y - 205) * fit,
+          y: (y - 160) * fit,
           dx: old ? old.dx : 0,
           dy: old ? old.dy : 0,
           vx: 0,
           vy: 0,
           phase,
+          accent: pixels[(y * 640 + x) * 4 + 1] < 128,
         });
       }
   }
@@ -647,7 +658,7 @@ export function createExhibit(stage, hooks = {}) {
     c.fillText(NAMES[k], -W / 2 + 50, H / 2 - 15);
     if (k === 2) {
       c.textAlign = "right";
-      c.fillText(`VG-01  REV ${board.rev}`, W / 2 - 46, -H / 2 + 24);
+      c.fillText(`VIDI-01  REV ${board.rev}`, W / 2 - 46, -H / 2 + 24);
     }
 
     // The rim: a dark hairline for definition, then the bright edge of the glass.
@@ -844,19 +855,19 @@ export function createExhibit(stage, hooks = {}) {
     ctx.globalAlpha = 1;
   }
 
-  /** The monogram: points of light resting on the top chip. @param {Matrix} m */
+  /** The Vidi signature: points of light resting on the top chip. @param {Matrix} m */
   function drawMotes(m) {
     if (motesShown <= 0.01 || !motes.length) return;
     const up = lift();
     const top = heightOf(2) + RISE.signer;
     const size = clamp(scale / 0.78, 0.7, 1.3);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    for (let pass = 0; pass < 2; pass++) {
+    for (let pass = 0; pass < 3; pass++) {
       ctx.beginPath();
       for (const mote of motes) {
         const moved = Math.min(1, Math.hypot(mote.dx, mote.dy) / 40);
         const bright = moved > 0.18 || mote.phase > 0.84;
-        if (bright !== (pass === 1)) continue;
+        if ((mote.accent ? 2 : bright ? 1 : 0) !== pass) continue;
         const float = motionOn()
           ? 2.4 + Math.sin(clock * 0.0011 + mote.phase * 6.283) * 2.2
           : 2.4;
@@ -869,7 +880,8 @@ export function createExhibit(stage, hooks = {}) {
         ctx.arc(sx, sy, r, 0, Math.PI * 2);
       }
       ctx.globalAlpha = fade[2] * motesShown * (pass === 1 ? 1 : 0.86);
-      ctx.fillStyle = pass === 1 ? palette.glint : palette.mote;
+      ctx.fillStyle =
+        pass === 2 ? "#8dcbfa" : pass === 1 ? palette.glint : palette.mote;
       ctx.fill();
     }
     ctx.globalAlpha = 1;
@@ -1043,7 +1055,7 @@ export function createExhibit(stage, hooks = {}) {
       hooks.onBooted?.();
     }
 
-    // The monogram: each point is sprung to its home and pushed by the pointer.
+    // The signature: each point is sprung to its home and pushed by the pointer.
     const n = dt / 16.67;
     let target = null;
     if (motion && pointer.active && motesShown > 0.5) {

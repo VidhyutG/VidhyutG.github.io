@@ -4,7 +4,7 @@ Personal portfolio for Vidhyut Gopinath, Software Engineer IV at Cisco Secure Fi
 
 ## Design and behavior
 
-An original hardware-inspired identity: warm paper, sky-blue glass, midnight navy, and copper-colored vias. The hero is an interactive conceptual platform with three layers, real procedural trace routing, a boot sequence, and a VG point projection. Every visit generates a board revision; `?rev=3FA2` pins a repeatable layout. The model is explicitly illustrative, not a Cisco product or architecture.
+An original hardware-inspired identity: warm paper, sky-blue glass, midnight navy, and copper-colored vias. The custom **vidi** signature joins the v and first i into one continuous route, with a chamfered d and a blue square contact. The hero is an interactive conceptual platform with three layers, real procedural trace routing, a boot sequence, and a particle rendering of that same signature. Every visit generates a board revision; `?rev=3FA2` pins a repeatable layout. The model is explicitly illustrative, not a Cisco product or architecture.
 
 Visitors can drag or use the arrow keys to turn the platform, press Home to reset its pose, select a layer, assemble the stack, and route a new revision. Native scrolling and pinch zoom remain available. Animation pauses offscreen or in a hidden tab. Reduced-motion preferences start it paused; the pause control also stops ambient CSS motion. Light and dark preferences are remembered locally. There are no trackers, frameworks, WebGL libraries, remote fonts, or runtime services.
 
@@ -21,6 +21,9 @@ The content leads with platform ownership, then measured outcomes, engineering l
 | `assets/js/exhibit/generate.js` | Seeded conceptual-board layout and net generation                                                      |
 | `assets/js/exhibit/route.js`    | Octilinear A* routing                                                                                  |
 | `assets/js/exhibit/worker.js`   | Routing off the main thread                                                                            |
+| `assets/brand/geometry.json`    | Original Vidi vector contours; the single editable logo master                                         |
+| `scripts/build-brand.py`        | Rebuild SVG masters, icons, canvas geometry, and the reusable logo kit                                 |
+| `assets/js/vidi-brand.js`       | Generated logo paths consumed by the interactive particle signature                                    |
 | `scripts/build-social.py`       | Rebuild the social-preview image from local fonts and the same board generator                         |
 | `assets/fonts/`                 | Self-hosted fonts and their Open Font Licenses                                                         |
 | `resume/` and `public/resume/`  | Identical current PDFs for root GitHub Pages and the Vite build                                        |
@@ -40,13 +43,14 @@ npm run build
 
 `npm run check` type-checks all active JavaScript, validates static links and PDFs, and tests the procedural board. `npm run build` produces `dist/`. For final visual review, check the static repository root too: that is what GitHub Pages serves.
 
-The social card uses Python with Pillow plus Node on PATH. It makes no network requests:
+The identity kit and social card use Python with Pillow; the social card also needs Node on PATH. They make no network requests:
 
 ```sh
+python3 scripts/build-brand.py
 python3 scripts/build-social.py
 ```
 
-Set `NODE_BINARY` to the Node executable if needed.
+Set `NODE_BINARY` to the Node executable if needed. After changing logo geometry, run both commands and rebuild the résumé. The share image is `assets/img/vidi-social-preview.png`. Logo usage guidance is in `assets/brand/README.md`; the reusable SVG/PNG/icon kit is generated in `../output/brand/`. Do not edit generated vector assets or canvas paths independently.
 
 ## Résumé source
 

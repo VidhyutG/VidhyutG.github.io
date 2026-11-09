@@ -1,9 +1,12 @@
 """Render the share card using the site's fonts and conceptual board; no network calls."""
 from pathlib import Path
-import json, math, os, subprocess
+import json, math, os, subprocess, importlib.util
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
+spec = importlib.util.spec_from_file_location("vidi_brand", ROOT / "scripts/build-brand.py")
+brand = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(brand)
 S = 2
 W, H = 1200, 630
 board = json.loads(subprocess.check_output([
@@ -56,18 +59,18 @@ for k,color in enumerate(["#173954","#cfdfed","#e8f2f9"]):
         x,y=p0
         d.ellipse(((x-2.5)*S,(y-2.5)*S,(x+2.5)*S,(y+2.5)*S),fill="#e7c46c")
 
-# The monogram is projected as dots, like its live counterpart.
-mask=Image.new("L",(320,180))
-ImageDraw.Draw(mask).text((12,-10),"VG",font=font(90,760),fill=255)
-for y in range(0,180,5):
-    for x in range(0,320,5):
-        if mask.getpixel((x,y))>150:
-            a,b=project(30+(x-160)/18,20+(y-90)/18,2)
-            d.ellipse(((a-.8)*S,(b-.8)*S,(a+.8)*S,(b+.8)*S),fill="#f2faff")
+# Project the same custom vector contours used by the header and résumé.
+mark=brand.raster("wordmark",384,"#f2faff","#8dcbfa")
+for y in range(0,mark.height,4):
+    for x in range(0,mark.width,4):
+        r,g,b,alpha=mark.getpixel((x,y))
+        if alpha>180:
+            a,b=project(30+(x-192)/16,20+(y-mark.height/2)/16,2)
+            color="#8dcbfa" if r<180 else "#f2faff"
+            d.ellipse(((a-.7)*S,(b-.7)*S,(a+.7)*S,(b+.7)*S),fill=color)
 
-d.ellipse((58*S,37*S,96*S,75*S),outline="#b7c8d8",width=2*S)
-line([(64,56),(72,56),(78,65),(84,44),(89,56),(94,56)],"#13263a",2.3)
-d.ellipse((91*S,53*S,97*S,59*S),fill="#c1932f")
+stamp=brand.raster("stamp",40*S,"#13263a","#1763ad")
+im.paste(stamp,(58*S,36*S),stamp)
 text(111,37,"Vidhyut Gopinath",28,weight=680)
 text(60,122,"I bring",110,weight=740)
 text(60,229,"firewalls",110,weight=740)
@@ -76,5 +79,5 @@ line([(60,516),(1140,516)],"#b6cadb")
 text(60,544,"Software Engineer IV / Cisco Secure Firewall",25,weight=650)
 text(60,584,"Hardware bring-up. Platform software. Engineering leadership.",20,"#41526a",450)
 text(983,549,"vidhyutg.github.io",18,"#1763ad",600)
-im.resize((W,H),Image.Resampling.LANCZOS).save(ROOT/"assets/img/social-preview.png",optimize=True)
-print("Built social-preview.png (1200 x 630)")
+im.resize((W,H),Image.Resampling.LANCZOS).save(ROOT/"assets/img/vidi-social-preview.png",optimize=True)
+print("Built vidi-social-preview.png (1200 x 630)")

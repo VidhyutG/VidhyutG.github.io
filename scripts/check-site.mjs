@@ -18,8 +18,14 @@ for (const [, attribute, value] of html.matchAll(/\b(href|src)="([^"]+)"/g)) {
     assert(ids.includes(value.slice(1)), `Broken anchor: ${value}`);
     continue;
   }
-  const path = resolve(root, value.replace(/^\//, ""));
+  const [asset, fragment] = value.split("#");
+  const path = resolve(root, asset.replace(/^\//, ""));
   assert(existsSync(path), `Missing ${attribute} asset: ${value}`);
+  if (fragment && asset.endsWith(".svg"))
+    assert(
+      readFileSync(path, "utf8").includes(`id="${fragment}"`),
+      `Missing SVG symbol: ${value}`,
+    );
 }
 for (const [tag] of html.matchAll(/<img\b[^>]*>/gs))
   assert(/\balt="[^"]+"/.test(tag), "Image missing descriptive alt text");

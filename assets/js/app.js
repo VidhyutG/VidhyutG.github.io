@@ -427,7 +427,7 @@ const year = document.getElementById("year");
 if (year) year.textContent = String(new Date().getFullYear());
 
 console.info(
-  "%cvg%c  Curious how the hero works? The board is laid out and routed on your device by an octilinear A* autorouter: assets/js/exhibit/route.js. Add ?rev=3FA2 to the address to pin a revision.",
+  "%cvidi%c  Curious how the hero works? The board is laid out and routed on your device by an octilinear A* autorouter: assets/js/exhibit/route.js. Add ?rev=3FA2 to the address to pin a revision.",
   "font: 700 15px system-ui; color: #1763ad",
   "font: 13px system-ui",
 );

@@ -387,11 +387,14 @@
     white-space: nowrap;
   }
   .brand-mark {
-    width: 30px;
+    width: 74px;
     height: 30px;
+    flex: none;
+    color: var(--ink);
   }
-  .brand-via {
-    fill: var(--gold);
+  .brand-name {
+    padding-left: 12px;
+    border-left: 1px solid var(--line);
   }
   .site-nav {
     display: flex;
@@ -1890,7 +1893,7 @@
   }
   @media (max-width: 520px) {
     .brand-name {
-      font-size: 0.95rem;
+      display: none;
     }
     .site-header {
       padding-left: 14px;
