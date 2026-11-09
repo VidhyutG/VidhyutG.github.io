@@ -1,28 +1,35 @@
-# Vidhyut Gopinath — From the board up
+# Vidhyut Gopinath — I bring firewalls to life.
 
 Personal portfolio for Vidhyut Gopinath, Software Engineer IV at Cisco Secure Firewall since November 2026.
 
-## Design direction
+## Design and behavior
 
-A custom hardware-inspired identity in Sky Blue, silver, and midnight navy. A CSS 3D exploded platform introduces the work; its VG particle signature responds to pointer, touch, and keyboard input. Visitors can assemble the platform and isolate hardware, platform OS, or security. The model is explicitly conceptual, not proprietary Cisco architecture.
+An original hardware-inspired identity: warm paper, sky-blue glass, midnight navy, and copper-colored vias. The hero is an interactive conceptual platform with three layers, real procedural trace routing, a boot sequence, and a VG point projection. Every visit generates a board revision; `?rev=3FA2` pins a repeatable layout. The model is explicitly illustrative, not a Cisco product or architecture.
 
-The content moves from current platform bring-up to measured engineering outcomes, organizational AI-native engineering work, and career context. No invented project claims, grades, promotion-speed comparisons, or confidential architecture. Glasswing remains limited to the authorized general contribution statement.
+Visitors can drag or use the arrow keys to turn the platform, press Home to reset its pose, select a layer, assemble the stack, and route a new revision. Native scrolling and pinch zoom remain available. Animation pauses offscreen or in a hidden tab. Reduced-motion preferences start it paused; the pause control also stops ambient CSS motion. Light and dark preferences are remembered locally. There are no trackers, frameworks, WebGL libraries, remote fonts, or runtime services.
 
-Research informed the redesign, accessed November 7, 2026:
+The content leads with platform ownership, then measured outcomes, engineering leadership, career context, and contact details. Core content and links remain available without JavaScript; the board has an SVG fallback.
 
-- [Linear](https://linear.app/): specific work presented with visual product demonstrations and clear hierarchy.
-- [Teenage Engineering](https://teenage.engineering/): distinctive hardware identity and product-focused presentation.
-- [Lusion](https://lusion.co/): interaction and spatial storytelling as part of the identity.
-- [WebKit: scroll-driven animations](https://webkit.org/blog/17101/a-guide-to-scroll-driven-animations-with-just-css/): native scroll timelines, progressive enhancement, and reduced-motion preferences.
-- [Chrome: scrollytelling guidance](https://developer.chrome.com/docs/modern-web-guidance/guides/ui-behaviors/scrollytelling): scroll-linked presentation without taking over native scrolling.
-- [MDN: transform-style](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/transform-style): preserving nested 3D geometry; avoiding flattening on the model ancestors.
-- [W3C reduced-motion technique](https://www.w3.org/WAI/WCAG22/Techniques/css/C39.html): honoring motion preferences.
+## Edit the site
 
-This is an original composition, not a reproduction of a reference site. No claim is made to represent every current design trend.
+| File                            | Purpose                                                                                                |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `index.html`                    | All professional copy, dates, metrics, links, page metadata, and static figures                        |
+| `assets/css/site.css`           | Design tokens, typography, glass surfaces, layout, responsive rules, and CSS motion                    |
+| `assets/js/app.js`              | Theme and motion controls, worker lifecycle, board controls, timeline cursor, and contact interactions |
+| `assets/js/exhibit/scene.js`    | Canvas rendering, cached layers, boot sequence, particles, pointer and keyboard input                  |
+| `assets/js/exhibit/generate.js` | Seeded conceptual-board layout and net generation                                                      |
+| `assets/js/exhibit/route.js`    | Octilinear A* routing                                                                                  |
+| `assets/js/exhibit/worker.js`   | Routing off the main thread                                                                            |
+| `scripts/build-social.py`       | Rebuild the social-preview image from local fonts and the same board generator                         |
+| `assets/fonts/`                 | Self-hosted fonts and their Open Font Licenses                                                         |
+| `resume/` and `public/resume/`  | Identical current PDFs for root GitHub Pages and the Vite build                                        |
 
-## Development
+The older `portfolio.css`, `portfolio.js`, and `projection.js` are superseded and are not loaded by this design.
 
-Requires Node 22.12+ or a supported newer LTS.
+## Local development
+
+Use Node 22.12+ or a supported newer LTS.
 
 ```sh
 npm ci
@@ -31,20 +38,38 @@ npm run check
 npm run build
 ```
 
-GitHub Pages serves `main` at the repository root. `.nojekyll` prevents template processing. The root remains a complete static site; Vite also generates a production bundle in `dist/`. No runtime framework, WebGL dependency, server, analytics, or secrets are shipped.
+`npm run check` type-checks all active JavaScript, validates static links and PDFs, and tests the procedural board. `npm run build` produces `dist/`. For final visual review, check the static repository root too: that is what GitHub Pages serves.
 
-## Source
+The social card uses Python with Pillow plus Node on PATH. It makes no network requests:
 
-- `index.html`: semantic content, metadata, abstract board artwork, native expandable case studies.
-- `assets/css/portfolio.css`: layout, CSS 3D model, responsive rules, progressive scroll animations.
-- `assets/js/portfolio.js`: motion preferences, layer selection, assembly, pointer tilt.
-- `assets/js/projection.js`: capped-density particle canvas; rendering stops offscreen, while hidden, or paused.
-- `assets/fonts/`: self-hosted Google Fonts with their OFL licenses.
-- `assets/img/social-preview.png`: social share card. Its source is `scripts/build-social.py` (Pillow; downloads the display font temporarily).
-- `resume/` and `public/resume/`: identical current PDF, retained for root Pages and Vite output.
+```sh
+python3 scripts/build-social.py
+```
 
-Core content, links, and expandable case studies work without JavaScript. The model has static geometry and the VG canvas has a typographic fallback. Motion starts paused when the OS requests reduced motion; a separate pause control stops ongoing animation. Native vertical scrolling and pinch zoom are preserved. The CSS scroll timeline effects are optional enhancements.
+Set `NODE_BINARY` to the Node executable if needed.
 
-## Content maintenance
+## Résumé source
 
-The résumé is the source for existing impact figures. New platform work is described as accelerated bring-up; no unsupported record or speed comparison is published. The 200+ figure is a forum audience, not a management headcount. Keep the résumé date at November 2026–present and retain earlier public projects as earlier work.
+In the local Codex workspace, the matching one-page résumé is authored in `../resume-source/resume.html`. Its builder is `../resume-source/build_resume.mjs`; Google Chrome renders the PDF using a temporary isolated profile. It fails if the result has more than one page.
+
+```sh
+node ../resume-source/build_resume.mjs
+```
+
+The final PDF is `../output/pdf/Vidhyut_Gopinath_Resume.pdf`. Inspect it before updating both repository copies; the optional `--publish` flag copies it to those paths. The earlier Python/Word generator is a previous design, not the current PDF source.
+
+## Publishing
+
+GitHub Pages serves the `main` branch at the repository root; `.nojekyll` prevents template processing. Commit and push the source files and current PDFs, then confirm the Pages build for that commit and inspect [the live site](https://vidhyutg.github.io/). No `dist/` deployment or separate hosting service is required.
+
+## Content guardrails
+
+- Keep the current role at November 2026–present.
+- Application deployment fell from approximately four hours to 35 minutes, approximately 85% less time. This is separate from FXOS Service Manager memory optimization.
+- The 4+ figure describes scope spanning teams, not managed headcount. The 200+ figure is an AI-for-SDLC forum audience.
+- Describe the two current platforms as accelerated bring-up; do not invent record-breaking comparisons or platform names.
+- Glasswing is limited to the authorized general contribution statement: work from Cisco's next-generation firewall OS team fixing critical vulnerabilities.
+- Do not add internal grades, promotion-speed comparisons, private architecture, or executive endorsements.
+- Earlier public projects remain identified as earlier work.
+
+The prior research notes are in the workspace's `output/Resume_Research_and_Notes.md`. The November redesign drew on hardware product presentation and native web interactions, including [Teenage Engineering](https://teenage.engineering/), [Linear](https://linear.app/), [Lusion](https://lusion.co/), and [W3C reduced-motion guidance](https://www.w3.org/WAI/WCAG22/Techniques/css/C39.html).

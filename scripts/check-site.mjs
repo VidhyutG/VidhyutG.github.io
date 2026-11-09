@@ -28,6 +28,17 @@ for (const [tag] of html.matchAll(/<button\b[^>]*>/gs))
 assert(!html.includes("ShohinResume"), "Unrelated legacy resume is linked");
 assert(!html.includes("Online 24/7"), "Stale template content remains");
 assert(!html.includes("docs.google.com/document"), "Old resume link remains");
+for (const [, path] of html.matchAll(/href="([^"]+\.css)"/g)) {
+  const stylesheet = resolve(root, path.replace(/^\//, ""));
+  const css = readFileSync(stylesheet, "utf8");
+  for (const [, asset] of css.matchAll(/url\(["']?([^"')]+)["']?\)/g)) {
+    if (/^(https?:|data:)/.test(asset)) continue;
+    assert(
+      existsSync(resolve(stylesheet, "..", asset)),
+      `Missing CSS asset: ${asset}`,
+    );
+  }
+}
 // Preserve meaningful word boundaries when headline spans and breaks reflow.
 for (const heading of html.matchAll(/<h[1-4]\b[^>]*>([\s\S]*?)<\/h[1-4]>/g)) {
   assert(
@@ -35,7 +46,7 @@ for (const heading of html.matchAll(/<h[1-4]\b[^>]*>([\s\S]*?)<\/h[1-4]>/g)) {
     "Missing word boundary at heading span",
   );
 }
-assert(html.includes("NOV 2026 — PRESENT"), "Current role date missing");
+assert(/Nov 2026\s*[–—-]\s*present/i.test(html), "Current role date missing");
 assert(
   !html.includes("promotion effective"),
   "Future promotion wording remains",

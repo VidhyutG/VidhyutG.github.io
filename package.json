@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "check": "tsc && node scripts/check-site.mjs",
+    "check": "tsc && node scripts/check-site.mjs && node --test scripts/exhibit.test.mjs",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "format": "prettier --write index.html assets/css/portfolio.css assets/js/portfolio.js assets/js/projection.js scripts/check-site.mjs package.json tsconfig.json README.md"
+    "format": "prettier --write index.html assets/css/site.css assets/js/app.js 'assets/js/exhibit/*.js' 'scripts/*.mjs' package.json tsconfig.json README.md"
   },
   "devDependencies": {
     "prettier": "3.9.6",
