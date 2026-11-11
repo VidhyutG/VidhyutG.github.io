@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-motion="running">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="robots" content="noindex" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/assets/brand/vidi-favicon.svg"
+    />
+    <link rel="stylesheet" href="/assets/css/site.css" />
+    <script>
+      (function () {
+        try {
+          var theme = localStorage.getItem("vg-theme");
+          if (theme !== "light" && theme !== "dark")
+            theme = matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+          document.documentElement.dataset.theme = theme;
+        } catch (error) {
+          /* Storage is optional. */
+        }
+      })();
+    </script>
+    <title>Page not found — Vidhyut Gopinath</title>
+  </head>
+  <body>
+    <div class="ambient" aria-hidden="true"></div>
+    <main class="lost wrap">
+      <a class="brand" href="/" aria-label="Vidhyut Gopinath, home">
+        <svg class="brand-mark" viewBox="0 0 192 76" aria-hidden="true">
+          <use href="/assets/brand/vidi-sprite.svg#wordmark" />
+        </svg>
+      </a>
+      <h1>This trace doesn’t connect.</h1>
+      <p class="lede">
+        There is no page at this address. It may have been mistyped, or the page
+        may have moved.
+      </p>
+      <p>
+        <a class="pill pill-solid pill-large" href="/">Go to the home page</a>
+      </p>
+    </main>
+  </body>
+</html>

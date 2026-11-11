@@ -1,14 +1,14 @@
 {
   "name": "vidhyut-portfolio",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "check": "tsc && node scripts/check-site.mjs && node --test scripts/exhibit.test.mjs",
+    "check": "tsc && node scripts/check-site.mjs && node --test scripts/exhibit.test.mjs scripts/ui.test.mjs",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "format": "prettier --write index.html assets/css/site.css assets/js/app.js assets/js/vidi-brand.js 'assets/js/exhibit/*.js' 'scripts/*.mjs' package.json tsconfig.json README.md"
+    "format": "prettier --write index.html 404.html assets/css/site.css assets/js/app.js assets/js/teardown.js assets/js/glass.js assets/js/palette.js assets/js/vidi-brand.js 'assets/js/exhibit/*.js' 'scripts/*.mjs' package.json tsconfig.json README.md"
   },
   "devDependencies": {
     "prettier": "3.9.6",

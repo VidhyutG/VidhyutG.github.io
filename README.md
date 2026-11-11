@@ -8,6 +8,12 @@ An original hardware-inspired identity: warm paper, sky-blue glass, midnight nav
 
 Visitors can drag or use the arrow keys to turn the platform, press Home to reset its pose, select a layer, assemble the stack, and route a new revision. Native scrolling and pinch zoom remain available. Animation pauses offscreen or in a hidden tab. Reduced-motion preferences start it paused; the pause control also stops ambient CSS motion. Light and dark preferences are remembered locally. There are no trackers, frameworks, WebGL libraries, remote fonts, or runtime services.
 
+The work section opens with the bring-up story. A second copy of the model stays pinned while five steps scroll past it, and it is taken apart to match: a plate for each layer, and the vias between plates for the work that joins those layers. One gold via runs through the whole stack and lights as far as the reader has come. With motion paused, on a very short screen, or without JavaScript, the same content reads as a plain list.
+
+The floating chrome is liquid glass. In Chromium the header, the small-screen dock, and the command palette refract their backdrop at the rim: `assets/js/glass.js` computes the bending from Snell's law for a quarter-round bezel and passes it to an SVG displacement filter. Other browsers, small devices, and reduced-transparency settings keep ordinary frosted glass. The lights behind the page drift slowly so the glass has something to catch.
+
+Small screens get a dock at the bottom for the four sections. The current item in the header, the dock, and the layer selector is marked by a highlight that slides. A command palette opens with ⌘K, Ctrl+K, `/`, or the header button, and reaches every action on the page: sections, theme, motion, routing a new board, copying a link to the revision on screen, and contact links.
+
 The content leads with platform ownership, then measured outcomes, engineering leadership, career context, and contact details. Core content and links remain available without JavaScript; the board has an SVG fallback.
 
 ## Edit the site
@@ -15,9 +21,13 @@ The content leads with platform ownership, then measured outcomes, engineering l
 | File                            | Purpose                                                                                                |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `index.html`                    | All professional copy, dates, metrics, links, page metadata, and static figures                        |
+| `404.html`                      | The page GitHub Pages serves for an address that does not exist                                        |
 | `assets/css/site.css`           | Design tokens, typography, glass surfaces, layout, responsive rules, and CSS motion                    |
 | `assets/js/app.js`              | Theme and motion controls, worker lifecycle, board controls, timeline cursor, and contact interactions |
-| `assets/js/exhibit/scene.js`    | Canvas rendering, cached layers, boot sequence, particles, pointer and keyboard input                  |
+| `assets/js/teardown.js`         | The pinned bring-up story: which plates and vias the model shows as each step passes                   |
+| `assets/js/glass.js`            | Liquid glass: the refraction map and the backdrop filter built from it                                 |
+| `assets/js/palette.js`          | The command palette and its search ranking                                                             |
+| `assets/js/exhibit/scene.js`    | Canvas rendering, cached layers, boot sequence, particles, input, and the pose and spotlight controls  |
 | `assets/js/exhibit/generate.js` | Seeded conceptual-board layout and net generation                                                      |
 | `assets/js/exhibit/route.js`    | Octilinear A* routing                                                                                  |
 | `assets/js/exhibit/worker.js`   | Routing off the main thread                                                                            |
@@ -41,7 +51,7 @@ npm run check
 npm run build
 ```
 
-`npm run check` type-checks all active JavaScript, validates static links and PDFs, and tests the procedural board. `npm run build` produces `dist/`. For final visual review, check the static repository root too: that is what GitHub Pages serves.
+`npm run check` type-checks all active JavaScript, validates static links and PDFs, and tests the procedural board, the refraction map, and command search. `npm run build` produces `dist/`. For final visual review, check the static repository root too: that is what GitHub Pages serves.
 
 The identity kit and social card use Python with Pillow; the social card also needs Node on PATH. They make no network requests:
 

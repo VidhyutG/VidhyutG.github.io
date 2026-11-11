@@ -4,6 +4,9 @@
  * figures are complete without it.
  */
 import { createExhibit } from "./exhibit/scene.js";
+import { createTeardown } from "./teardown.js";
+import { liquify } from "./glass.js";
+import { createPalette } from "./palette.js";
 
 /** @typedef {import("./exhibit/generate.js").Board} Board */
 
@@ -109,6 +112,9 @@ const layerButtons = [...document.querySelectorAll("button[data-layer]")];
 const explodeButton = document.querySelector('[data-action="explode"]');
 const respinButton = document.querySelector('[data-action="respin"]');
 
+const story = document.querySelector("[data-teardown]");
+const teardown = story instanceof HTMLElement ? createTeardown(story) : null;
+
 const DESCRIPTIONS = [
   "PHY, switching, and hardware interfaces. Bring-up starts at the board.",
   "Firmware, Linux, FXOS, QDMA, and applications. Make the layers work together.",
@@ -182,6 +188,8 @@ function pickSeed() {
 }
 
 let routing = false;
+/** The revision on screen, for commands that refer to it. */
+let boardRev = "";
 
 /** @param {number} seed */
 async function showBoard(seed) {
@@ -197,6 +205,8 @@ async function showBoard(seed) {
       hero?.classList.add("is-booting");
     }
     exhibit.load(board);
+    teardown?.load(board);
+    boardRev = board.rev;
     // These numbers describe only the conceptual board on screen.
     if (stamp)
       stamp.textContent = `Rev ${board.rev}: ${nets} nets and ${vias} vias, routed in ${ms} ms in your browser.`;
@@ -255,43 +265,6 @@ if (exhibit) {
     respinButton.classList.add("is-busy");
     void showBoard(crypto.getRandomValues(new Uint16Array(1))[0]);
   });
-}
-
-// ── The bring-up path fills as it scrolls into view ──────────────────────
-const stackup = document.querySelector("[data-stackup]");
-if (stackup instanceof HTMLElement) {
-  let queued = false;
-  const measure = () => {
-    queued = false;
-    if (root.dataset.motion === "paused")
-      return stackup.style.setProperty("--progress", "1");
-    const box = stackup.getBoundingClientRect();
-    const begin = innerHeight * 0.9;
-    const end = innerHeight * 0.34;
-    const progress =
-      (begin - box.top) / Math.max(1, begin - end + box.height * 0.2);
-    stackup.style.setProperty(
-      "--progress",
-      Math.min(1, Math.max(0, progress)).toFixed(3),
-    );
-  };
-  const request = () => {
-    if (!queued) {
-      queued = true;
-      requestAnimationFrame(measure);
-    }
-  };
-  new IntersectionObserver(
-    (entries) => {
-      if (entries[0]?.isIntersecting)
-        addEventListener("scroll", request, { passive: true });
-      else removeEventListener("scroll", request);
-      request();
-    },
-    { rootMargin: "20% 0px" },
-  ).observe(stackup);
-  addEventListener("resize", request, { passive: true });
-  measure();
 }
 
 // ── The path so far: a cursor reads out the date beneath the pointer ─────
@@ -378,24 +351,211 @@ for (const button of document.querySelectorAll("[data-copy]"))
     setTimeout(() => (button.textContent = label), 1600);
   });
 
-// Mark the section being read in the navigation.
-const links = new Map(
-  [...document.querySelectorAll(".site-nav a")].map((link) => [
-    link.getAttribute("href"),
-    link,
-  ]),
-);
+// Mark the section being read, in the header and in the dock.
+/** @type {Map<string, Element[]>} */
+const links = new Map();
+for (const link of document.querySelectorAll(".site-nav a, .dock a")) {
+  const target = link.getAttribute("href") || "";
+  links.set(target, [...(links.get(target) || []), link]);
+}
 const spy = new IntersectionObserver(
   (entries) => {
-    for (const entry of entries) {
-      const link = links.get(`#${entry.target.id}`);
-      if (link) link.setAttribute("aria-current", String(entry.isIntersecting));
-    }
+    for (const entry of entries)
+      for (const link of links.get(`#${entry.target.id}`) || [])
+        link.setAttribute("aria-current", String(entry.isIntersecting));
   },
   { rootMargin: "-45% 0px -50% 0px" },
 );
 for (const section of document.querySelectorAll("main section[id]"))
   spy.observe(section);
+
+/**
+ * A highlight that slides to whichever item in a group is current, instead
+ * of blinking from one to the next. Without it, each item shows its own.
+ * @param {Element | null} group @param {string} current selector for the current item
+ */
+function slidingThumb(group, current) {
+  if (!(group instanceof HTMLElement)) return;
+  const thumb = document.createElement("span");
+  thumb.className = "thumb";
+  thumb.setAttribute("aria-hidden", "true");
+  group.prepend(thumb);
+  group.classList.add("has-thumb");
+  const place = () => {
+    const item = group.querySelector(current);
+    const frame =
+      thumb.offsetParent instanceof HTMLElement ? thumb.offsetParent : group;
+    if (!(item instanceof HTMLElement) || !item.offsetWidth)
+      return group.style.setProperty("--thumb-o", "0");
+    const box = item.getBoundingClientRect();
+    const origin = frame.getBoundingClientRect();
+    group.style.setProperty("--thumb-x", `${box.left - origin.left}px`);
+    group.style.setProperty("--thumb-y", `${box.top - origin.top}px`);
+    group.style.setProperty("--thumb-w", `${box.width}px`);
+    group.style.setProperty("--thumb-h", `${box.height}px`);
+    group.style.setProperty("--thumb-o", "1");
+  };
+  new MutationObserver(place).observe(group, {
+    attributes: true,
+    subtree: true,
+    attributeFilter: ["aria-current", "aria-pressed"],
+  });
+  new ResizeObserver(place).observe(group);
+  void document.fonts.ready.then(place);
+  place();
+  // The first placement should not animate in from the corner.
+  requestAnimationFrame(() =>
+    requestAnimationFrame(() => group.classList.add("is-ready")),
+  );
+}
+slidingThumb(document.querySelector(".site-nav"), '[aria-current="true"]');
+slidingThumb(document.querySelector(".dock"), '[aria-current="true"]');
+slidingThumb(document.querySelector(".segmented"), '[aria-pressed="true"]');
+
+// The dock waits below the screen until the page has been scrolled.
+const dock = document.querySelector(".dock");
+const opening = document.querySelector(".role");
+if (dock && opening) {
+  dock.classList.add("is-away");
+  new IntersectionObserver((entries) => {
+    dock.classList.toggle("is-away", entries[0]?.isIntersecting ?? false);
+  }).observe(opening);
+}
+
+// ── The command palette ──────────────────────────────────────────────────
+const toast = document.createElement("p");
+toast.className = "toast";
+toast.setAttribute("role", "status");
+document.body.append(toast);
+let toastTimer = 0;
+/** A short confirmation that fades by itself. @param {string} message */
+function announce(message) {
+  toast.textContent = message;
+  toast.classList.add("is-shown");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("is-shown"), 2200);
+}
+/**
+ * Copy text, and say so. If the browser refuses, say where to find it instead.
+ * @param {string} text @param {string} done @param {string} otherwise
+ */
+async function copy(text, done, otherwise) {
+  try {
+    await navigator.clipboard.writeText(text);
+    announce(done);
+  } catch {
+    announce(otherwise);
+  }
+}
+/** @param {string} target */
+const go = (target) =>
+  document.querySelector(target)?.scrollIntoView({ block: "start" });
+/** @param {string} address */
+const visit = (address) => window.open(address, "_blank", "noopener");
+/** Do something to the model, after bringing it into view. @param {Element | null} control */
+const atModel = (control) => {
+  go("#home");
+  if (control instanceof HTMLElement) control.click();
+};
+
+const palette = createPalette(() => {
+  const rev = boardRev;
+  const apart = explodeButton?.getAttribute("aria-pressed") === "true";
+  const dark = root.dataset.theme === "dark";
+  const paused = root.dataset.motion === "paused";
+  return [
+    { group: "Go to", label: "Work", run: () => go("#work") },
+    { group: "Go to", label: "Leadership", run: () => go("#leadership") },
+    { group: "Go to", label: "About", run: () => go("#about") },
+    { group: "Go to", label: "Contact", run: () => go("#contact") },
+    { group: "Go to", label: "Top of the page", run: () => go("#home") },
+    {
+      group: "The model",
+      label: "Route a new board revision",
+      hint: rev ? `Now rev ${rev}` : "",
+      keywords: "respin regenerate random autoroute",
+      run: () => atModel(respinButton),
+    },
+    {
+      group: "The model",
+      label: apart ? "Assemble the platform" : "Take the platform apart",
+      keywords: "explode layers stack",
+      run: () => atModel(explodeButton),
+    },
+    ...(rev
+      ? [
+          {
+            group: "The model",
+            label: "Copy a link to this board revision",
+            hint: `?rev=${rev}`,
+            keywords: "share pin url",
+            run: () => {
+              // The link also goes in the address bar, in case copying is blocked.
+              history.replaceState(null, "", `?rev=${rev}`);
+              void copy(
+                location.href,
+                `Link to rev ${rev} copied.`,
+                `Copying is blocked here. The link to rev ${rev} is in the address bar.`,
+              );
+            },
+          },
+        ]
+      : []),
+    {
+      group: "View",
+      label: dark ? "Switch to the light theme" : "Switch to the dark theme",
+      keywords: "dark light mode appearance color",
+      run: () => themeToggle instanceof HTMLElement && themeToggle.click(),
+    },
+    {
+      group: "View",
+      label: paused ? "Play animation" : "Pause animation",
+      keywords: "motion reduce stop",
+      run: () => motionButton instanceof HTMLElement && motionButton.click(),
+    },
+    {
+      group: "Get in touch",
+      label: "Copy my email address",
+      hint: "vidhyutap@gmail.com",
+      keywords: "mail contact",
+      run: () =>
+        void copy(
+          "vidhyutap@gmail.com",
+          "Email address copied.",
+          "Copying is blocked here. The address is in the contact section.",
+        ),
+    },
+    {
+      group: "Get in touch",
+      label: "Open my résumé",
+      hint: "PDF",
+      keywords: "resume cv",
+      run: () => visit("/resume/Vidhyut_Gopinath_Resume_2026.pdf"),
+    },
+    {
+      group: "Get in touch",
+      label: "Open LinkedIn",
+      run: () =>
+        visit("https://www.linkedin.com/in/vidhyut-gopinath-2a7306155/"),
+    },
+    {
+      group: "Get in touch",
+      label: "Open GitHub",
+      keywords: "code source repositories",
+      run: () => visit("https://github.com/VidhyutG"),
+    },
+  ];
+});
+const paletteButton = document.querySelector(".palette-open");
+if (paletteButton instanceof HTMLElement) {
+  paletteButton.hidden = false;
+  const mac = /Mac|iPhone|iPad/.test(navigator.platform);
+  paletteButton.title = `Commands (${mac ? "⌘K" : "Ctrl+K"})`;
+  paletteButton.addEventListener("click", () => palette.open());
+}
+
+// Chrome that floats over the page bends what is behind it.
+liquify([...document.querySelectorAll("[data-liquid]")]);
 
 // Glass catches the light nearest the pointer.
 if (finePointer.matches)

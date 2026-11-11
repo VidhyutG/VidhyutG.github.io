@@ -54,6 +54,7 @@ const PALETTE = {
     viaLive: "#2a84d6",
     viaGlow: "rgba(48, 140, 228, 0.35)",
     gold: "#c1932f",
+    thread: "#f3cf73",
     mote: "#bfdff6",
     glint: "#ffffff",
     plates: [
@@ -128,6 +129,7 @@ const PALETTE = {
     viaLive: "#bfe6ff",
     viaGlow: "rgba(110, 200, 255, 0.5)",
     gold: "#f0cd78",
+    thread: "#fff4d2",
     mote: "#9fd6ff",
     glint: "#ffffff",
     plates: [
@@ -213,10 +215,19 @@ function blend(from, to, t) {
 }
 
 /**
+ * @typedef {object} ExhibitOptions
+ * @property {boolean} [interactive] Pointer and keyboard control. Off for a model the page drives.
+ * @property {{yaw:number, tilt:number}} [home] Resting pose, in degrees.
+ * @property {{yaw:number[], tilt:number[]}} [range] Limits for each angle.
+ * @property {number} [gap] Distance between plates when fully apart, in plate units.
+ */
+
+/**
  * @param {HTMLElement} stage element containing one <canvas>
  * @param {{onBooted?: () => void}} [hooks]
+ * @param {ExhibitOptions} [options]
  */
-export function createExhibit(stage, hooks = {}) {
+export function createExhibit(stage, hooks = {}, options = {}) {
   const candidate = stage.querySelector("canvas");
   if (!(candidate instanceof HTMLCanvasElement)) return null;
   const canvas = candidate;
@@ -224,6 +235,10 @@ export function createExhibit(stage, hooks = {}) {
   if (!context) return null;
   const ctx = context;
   const root = document.documentElement;
+  const home = options.home ?? HOME;
+  const range = options.range ?? RANGE;
+  const apart = options.gap ?? GAP;
+  const interactive = options.interactive !== false;
 
   const caches = [0, 1, 2].map(() => document.createElement("canvas"));
   const cacheKeys = ["", "", ""];
@@ -249,13 +264,20 @@ export function createExhibit(stage, hooks = {}) {
   /** @type {"light" | "dark"} */
   let themeName = "light";
 
-  const view = { yaw: HOME.yaw, tilt: HOME.tilt, explode: 1 };
-  const base = { yaw: HOME.yaw, tilt: HOME.tilt };
+  const view = { yaw: home.yaw, tilt: home.tilt, explode: 1 };
+  const base = { yaw: home.yaw, tilt: home.tilt };
   const hover = { yaw: 0, tilt: 0 };
   let explodeTarget = 1;
   let spin = 0;
   const fade = [1, 1, 1];
   const fadeTarget = [1, 1, 1];
+  /** How strongly the vias in each gap are picked out, 0 to 1. */
+  const boost = [0, 0];
+  const boostTarget = [0, 0];
+  const nextRise = [0, 0];
+  /** How far up the stack the through-via is lit, 0 to 1. Negative leaves it as ordinary copper. */
+  let thread = -1;
+  let threadTarget = -1;
 
   const powered = [false, false, false];
   const viaLive = [false, false];
@@ -308,7 +330,7 @@ export function createExhibit(stage, hooks = {}) {
   /** Screen pixels climbed per plate unit of height. */
   const lift = () => scale * Math.sin(view.tilt * RAD);
   const heightOf = (/** @type {number} */ k) =>
-    (k - 1) * (REST + (GAP - REST) * view.explode);
+    (k - 1) * (REST + (apart - REST) * view.explode);
 
   /** @param {CanvasRenderingContext2D} c @param {Matrix} m @param {number} dy */
   function place(c, m, dy) {
@@ -477,13 +499,13 @@ export function createExhibit(stage, hooks = {}) {
       }
     }
     // Fit the exploded stack, at its home pose, inside the stage.
-    const yaw = HOME.yaw * RAD;
-    const tilt = HOME.tilt * RAD;
+    const yaw = home.yaw * RAD;
+    const tilt = home.tilt * RAD;
     const spanX = W * Math.abs(Math.cos(yaw)) + H * Math.abs(Math.sin(yaw));
     const spanY =
       Math.cos(tilt) *
         (W * Math.abs(Math.sin(yaw)) + H * Math.abs(Math.cos(yaw))) +
-      Math.sin(tilt) * (2 * GAP + 34);
+      Math.sin(tilt) * (2 * apart + 34);
     scale = Math.min((width * 0.95) / spanX, (height * 0.93) / spanY);
     centerX = width / 2;
     centerY = height / 2 + 6;
@@ -610,7 +632,7 @@ export function createExhibit(stage, hooks = {}) {
     c.fill(plate);
 
     // A soft band of reflected light that slides as the model turns.
-    const at = clamp(0.46 + (view.yaw - HOME.yaw) * 0.012, 0.12, 0.88);
+    const at = clamp(0.46 + (view.yaw - home.yaw) * 0.012, 0.12, 0.88);
     const sheen = c.createLinearGradient(-W / 2, H / 2, W / 2, -H / 2);
     sheen.addColorStop(clamp(at - 0.2, 0, 1), "rgba(255, 255, 255, 0)");
     sheen.addColorStop(at, `rgba(255, 255, 255, ${style.sheen})`);
@@ -783,7 +805,8 @@ export function createExhibit(stage, hooks = {}) {
    * @param {number} k @param {Matrix} m @param {number} dy
    */
   function drawRaised(k, m, dy) {
-    if (!board) return;
+    // A ghosted plate keeps its ghosted parts: redrawing them would stack up to solid.
+    if (!board || fade[k] < 0.6) return;
     const lifted = { ...m, f: m.f + dy };
     ctx.globalAlpha = fade[k];
     for (const part of board.layers[k].parts)
@@ -799,19 +822,24 @@ export function createExhibit(stage, hooks = {}) {
     const from = heightOf(k) * up;
     const to = (heightOf(k + 1) - THICK[k + 1]) * up;
     if (from - to > -3) return;
-    const alpha = Math.min(fade[k], fade[k + 1]);
+    const pick = boost[k];
+    const shared = Math.max(Math.min(fade[k], fade[k + 1]), pick);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.lineCap = "round";
     const lit = viaLive[k] ? 1 : clamp((clock - VIA_AT[k]) / VIA_SPAN, 0, 1);
+    // The thread climbs the lower gap first, then the upper one.
+    const threaded = thread < 0 ? -1 : clamp(thread * 2 - k, 0, 1);
     board.vias.forEach((via, index) => {
       if (via.lower !== k) return;
+      const joined = via.through && threaded >= 0;
+      const alpha = joined ? 1 : shared;
       const x = ux(via.x);
       const y = uy(via.y);
       const sx = m.e + m.a * x + m.c * y;
       const sy = m.f + m.b * x + m.d * y;
       const y0 = sy - from;
       const y1 = sy - to;
-      const wide = via.through ? 3 : 2;
+      const wide = (via.through ? 3 : 2) + pick * 0.8;
       ctx.globalAlpha = alpha;
       ctx.strokeStyle = via.through ? palette.gold : palette.via;
       ctx.lineWidth = wide;
@@ -821,9 +849,9 @@ export function createExhibit(stage, hooks = {}) {
       ctx.stroke();
       if (lit > 0) {
         const top = y0 + (y1 - y0) * lit;
-        ctx.globalAlpha = alpha * 0.6;
+        ctx.globalAlpha = alpha * (0.6 + pick * 0.3);
         ctx.strokeStyle = palette.viaGlow;
-        ctx.lineWidth = wide + 5;
+        ctx.lineWidth = wide + 5 + pick * 5;
         ctx.beginPath();
         ctx.moveTo(sx, y0);
         ctx.lineTo(sx, top);
@@ -831,6 +859,23 @@ export function createExhibit(stage, hooks = {}) {
         ctx.globalAlpha = alpha;
         ctx.strokeStyle = via.through ? palette.gold : palette.viaLive;
         ctx.lineWidth = wide;
+        ctx.beginPath();
+        ctx.moveTo(sx, y0);
+        ctx.lineTo(sx, top);
+        ctx.stroke();
+      }
+      if (joined && threaded > 0) {
+        const top = y0 + (y1 - y0) * threaded;
+        ctx.globalAlpha = 0.36;
+        ctx.strokeStyle = palette.gold;
+        ctx.lineWidth = wide + 10;
+        ctx.beginPath();
+        ctx.moveTo(sx, y0);
+        ctx.lineTo(sx, top);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = palette.thread;
+        ctx.lineWidth = Math.max(1.5, wide - 1);
         ctx.beginPath();
         ctx.moveTo(sx, y0);
         ctx.lineTo(sx, top);
@@ -917,6 +962,8 @@ export function createExhibit(stage, hooks = {}) {
     if (!board || !board.vias.length) return;
     const pick = Math.floor(Math.random() * board.vias.length);
     const via = board.vias[pick];
+    // Nothing travels through plates that have been faded back.
+    if (fadeTarget[via.lower] < 0.5 || fadeTarget[via.lower + 1] < 0.5) return;
     const below = prepared[via.lower].byId.get(via.netBelow);
     const above = prepared[via.lower + 1].byId.get(via.netAbove);
     if (!below || !above) return;
@@ -957,7 +1004,10 @@ export function createExhibit(stage, hooks = {}) {
 
   /** A lone pulse along one of the buses. */
   function launchPulse() {
-    const k = Math.random() < 0.6 ? 0 : Math.random() < 0.5 ? 1 : 2;
+    // The bottom plate is the busiest; plates that are faded back stay quiet.
+    const shown = [0, 0, 0, 1, 2].filter((index) => fadeTarget[index] >= 0.5);
+    if (!shown.length) return;
+    const k = shown[Math.floor(Math.random() * shown.length)];
     const wires = prepared[k].wires.filter(
       (wire) => wire.net.kind !== "stub" && wire.length > 40,
     );
@@ -976,25 +1026,26 @@ export function createExhibit(stage, hooks = {}) {
   /** Advance the model. @param {number} dt milliseconds @returns {boolean} whether to keep animating */
   function step(dt) {
     if (!board) return false;
+    const current = board;
     let busy = false;
     const ease = 1 - Math.exp(-dt / 130);
     const motion = motionOn();
 
     if (!motion) spin = 0;
     if (motion && !pointer.dragging && Math.abs(spin) > 0.002) {
-      base.yaw = clamp(base.yaw + spin * dt, RANGE.yaw[0], RANGE.yaw[1]);
+      base.yaw = clamp(base.yaw + spin * dt, range.yaw[0], range.yaw[1]);
       spin *= Math.exp(-dt / 260);
       busy = true;
     }
     const yawTo = clamp(
       base.yaw + (motion ? hover.yaw : 0),
-      RANGE.yaw[0] - 6,
-      RANGE.yaw[1] + 6,
+      range.yaw[0] - 6,
+      range.yaw[1] + 6,
     );
     const tiltTo = clamp(
       base.tilt + (motion ? hover.tilt : 0),
-      RANGE.tilt[0] - 3,
-      RANGE.tilt[1] + 3,
+      range.tilt[0] - 3,
+      range.tilt[1] + 3,
     );
     for (const [
       name,
@@ -1017,6 +1068,22 @@ export function createExhibit(stage, hooks = {}) {
         busy = true;
       } else fade[k] = fadeTarget[k];
     }
+    for (let k = 0; k < 2; k++) {
+      const gap = boostTarget[k] - boost[k];
+      if (Math.abs(gap) > 0.004) {
+        boost[k] += gap * (motion ? ease : 1);
+        busy = true;
+      } else boost[k] = boostTarget[k];
+    }
+    if (threadTarget < 0) thread = -1;
+    else {
+      const from = Math.max(thread, 0);
+      const gap = threadTarget - from;
+      if (Math.abs(gap) > 0.002) {
+        thread = from + gap * (motion ? ease : 1);
+        busy = true;
+      } else thread = threadTarget;
+    }
 
     if (motion) {
       clock += dt;
@@ -1037,6 +1104,23 @@ export function createExhibit(stage, hooks = {}) {
           if (Math.random() < 0.62) launchPacket();
           else launchPulse();
           nextPacket = clock + 420 + Math.random() * 900;
+        }
+        // A picked-out gap carries a steady climb of signals.
+        for (let k = 0; k < 2; k++) {
+          if (boost[k] < 0.5 || clock < nextRise[k]) continue;
+          /** @type {number[]} */
+          const candidates = [];
+          current.vias.forEach((via, index) => {
+            if (via.lower === k) candidates.push(index);
+          });
+          if (candidates.length)
+            viaPulses.push({
+              via: candidates[Math.floor(Math.random() * candidates.length)],
+              start: clock,
+              span: 460,
+              next: null,
+            });
+          nextRise[k] = clock + 110 + Math.random() * 170;
         }
       }
       const finished = pulses.filter(
@@ -1135,80 +1219,82 @@ export function createExhibit(stage, hooks = {}) {
     pointer.y =
       ((event.clientY - bounds.top) / Math.max(1, bounds.height)) * height;
   }
-  stage.addEventListener("pointerdown", (event) => {
-    if (event.button > 0) return;
-    locate(event);
-    pointer.active = true;
-    pointer.dragging = true;
-    pointer.lastX = event.clientX;
-    pointer.lastY = event.clientY;
-    spin = 0;
-    stage.setPointerCapture?.(event.pointerId);
-    stage.classList.add("is-dragging");
-    invalidate();
-  });
-  stage.addEventListener(
-    "pointermove",
-    (event) => {
+  if (interactive) {
+    stage.addEventListener("pointerdown", (event) => {
+      if (event.button > 0) return;
       locate(event);
       pointer.active = true;
-      if (pointer.dragging) {
-        const dx = event.clientX - pointer.lastX;
-        const dy = event.clientY - pointer.lastY;
-        pointer.lastX = event.clientX;
-        pointer.lastY = event.clientY;
-        base.yaw = clamp(base.yaw + dx * 0.24, RANGE.yaw[0], RANGE.yaw[1]);
-        if (event.pointerType === "mouse")
-          base.tilt = clamp(
-            base.tilt - dy * 0.12,
-            RANGE.tilt[0],
-            RANGE.tilt[1],
-          );
-        spin = clamp(dx * 0.012, -0.12, 0.12);
-      } else if (event.pointerType === "mouse") {
-        hover.yaw = (pointer.x / width - 0.5) * 9;
-        hover.tilt = (pointer.y / height - 0.5) * -5;
-      }
+      pointer.dragging = true;
+      pointer.lastX = event.clientX;
+      pointer.lastY = event.clientY;
+      spin = 0;
+      stage.setPointerCapture?.(event.pointerId);
+      stage.classList.add("is-dragging");
       invalidate();
-    },
-    { passive: true },
-  );
-  const release = () => {
-    pointer.dragging = false;
-    stage.classList.remove("is-dragging");
-    invalidate();
-  };
-  stage.addEventListener("pointerup", (event) => {
-    release();
-    if (event.pointerType !== "mouse") pointer.active = false;
-  });
-  stage.addEventListener("pointercancel", () => {
-    release();
-    pointer.active = false;
-  });
-  stage.addEventListener("pointerleave", () => {
-    if (pointer.dragging) return;
-    pointer.active = false;
-    hover.yaw = hover.tilt = 0;
-    invalidate();
-  });
-  stage.addEventListener("keydown", (event) => {
-    const turn = {
-      ArrowLeft: [-8, 0],
-      ArrowRight: [8, 0],
-      ArrowUp: [0, 3],
-      ArrowDown: [0, -3],
-    }[event.key];
-    if (event.key === "Home") {
-      base.yaw = HOME.yaw;
-      base.tilt = HOME.tilt;
-    } else if (turn) {
-      base.yaw = clamp(base.yaw + turn[0], RANGE.yaw[0], RANGE.yaw[1]);
-      base.tilt = clamp(base.tilt + turn[1], RANGE.tilt[0], RANGE.tilt[1]);
-    } else return;
-    event.preventDefault();
-    invalidate();
-  });
+    });
+    stage.addEventListener(
+      "pointermove",
+      (event) => {
+        locate(event);
+        pointer.active = true;
+        if (pointer.dragging) {
+          const dx = event.clientX - pointer.lastX;
+          const dy = event.clientY - pointer.lastY;
+          pointer.lastX = event.clientX;
+          pointer.lastY = event.clientY;
+          base.yaw = clamp(base.yaw + dx * 0.24, range.yaw[0], range.yaw[1]);
+          if (event.pointerType === "mouse")
+            base.tilt = clamp(
+              base.tilt - dy * 0.12,
+              range.tilt[0],
+              range.tilt[1],
+            );
+          spin = clamp(dx * 0.012, -0.12, 0.12);
+        } else if (event.pointerType === "mouse") {
+          hover.yaw = (pointer.x / width - 0.5) * 9;
+          hover.tilt = (pointer.y / height - 0.5) * -5;
+        }
+        invalidate();
+      },
+      { passive: true },
+    );
+    const release = () => {
+      pointer.dragging = false;
+      stage.classList.remove("is-dragging");
+      invalidate();
+    };
+    stage.addEventListener("pointerup", (event) => {
+      release();
+      if (event.pointerType !== "mouse") pointer.active = false;
+    });
+    stage.addEventListener("pointercancel", () => {
+      release();
+      pointer.active = false;
+    });
+    stage.addEventListener("pointerleave", () => {
+      if (pointer.dragging) return;
+      pointer.active = false;
+      hover.yaw = hover.tilt = 0;
+      invalidate();
+    });
+    stage.addEventListener("keydown", (event) => {
+      const turn = {
+        ArrowLeft: [-8, 0],
+        ArrowRight: [8, 0],
+        ArrowUp: [0, 3],
+        ArrowDown: [0, -3],
+      }[event.key];
+      if (event.key === "Home") {
+        base.yaw = home.yaw;
+        base.tilt = home.tilt;
+      } else if (turn) {
+        base.yaw = clamp(base.yaw + turn[0], range.yaw[0], range.yaw[1]);
+        base.tilt = clamp(base.tilt + turn[1], range.tilt[0], range.tilt[1]);
+      } else return;
+      event.preventDefault();
+      invalidate();
+    });
+  }
 
   // ── Lifecycle ────────────────────────────────────────────────────────────
   new ResizeObserver(resize).observe(stage);
@@ -1243,10 +1329,11 @@ export function createExhibit(stage, hooks = {}) {
   return {
     /**
      * Show a board. The first one powers up layer by layer; later ones too,
-     * unless motion is paused.
+     * unless motion is paused. Pass instant to skip the power-up.
      * @param {Board} next
+     * @param {boolean} [instant]
      */
-    load(next) {
+    load(next, instant = false) {
       board = next;
       boardVersion++;
       prepare();
@@ -1261,7 +1348,7 @@ export function createExhibit(stage, hooks = {}) {
       bootReported = false;
       motesShown = 0;
       nextPacket = BOOTED_AT + 200;
-      if (motionOn()) scatterMotes();
+      if (motionOn() && !instant) scatterMotes();
       else powerOnInstantly();
       stage.classList.add("is-live");
       cacheKeys.fill("");
@@ -1276,6 +1363,42 @@ export function createExhibit(stage, hooks = {}) {
     /** @param {boolean} apart */
     explode(apart) {
       explodeTarget = apart ? 1 : 0;
+      invalidate();
+    },
+    /**
+     * Steer the model from outside: any of yaw, tilt (degrees) and explode (0 to 1).
+     * The model eases toward the new pose unless immediate is set.
+     * @param {{yaw?: number, tilt?: number, explode?: number}} next
+     * @param {boolean} [immediate]
+     */
+    pose(next, immediate = false) {
+      if (next.yaw !== undefined) base.yaw = next.yaw;
+      if (next.tilt !== undefined) base.tilt = next.tilt;
+      if (next.explode !== undefined) explodeTarget = clamp(next.explode, 0, 1);
+      if (immediate) {
+        view.yaw = base.yaw;
+        view.tilt = base.tilt;
+        view.explode = explodeTarget;
+      }
+      invalidate();
+    },
+    /**
+     * Pick out parts of the stack: an opacity for each plate, and an emphasis
+     * for the vias in each of the two gaps between them.
+     * @param {number[]} plates @param {number[]} [gaps]
+     */
+    spotlight(plates, gaps = [0, 0]) {
+      for (let k = 0; k < 3; k++) fadeTarget[k] = clamp(plates[k] ?? 1, 0, 1);
+      for (let k = 0; k < 2; k++) boostTarget[k] = clamp(gaps[k] ?? 0, 0, 1);
+      invalidate();
+    },
+    /**
+     * Light the through-via from the bottom plate upward, 0 to 1. A negative
+     * value returns it to ordinary copper.
+     * @param {number} amount
+     */
+    thread(amount) {
+      threadTarget = amount < 0 ? -1 : clamp(amount, 0, 1);
       invalidate();
     },
     /** Repaint now, in the current theme. Used when the theme changes mid-transition. */

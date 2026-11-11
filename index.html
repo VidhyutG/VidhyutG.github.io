@@ -34,6 +34,24 @@
     />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="canonical" href="https://vidhyutg.github.io/" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Vidhyut Gopinath",
+        "url": "https://vidhyutg.github.io/",
+        "jobTitle": "Software Engineer IV",
+        "worksFor": { "@type": "Organization", "name": "Cisco" },
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "San José State University"
+        },
+        "sameAs": [
+          "https://www.linkedin.com/in/vidhyut-gopinath-2a7306155/",
+          "https://github.com/VidhyutG"
+        ]
+      }
+    </script>
     <link
       rel="icon"
       type="image/svg+xml"
@@ -55,6 +73,7 @@
       // Settle the theme and motion before first paint, so nothing flashes.
       (function () {
         var root = document.documentElement;
+        root.classList.add("js");
         try {
           var theme = localStorage.getItem("vg-theme");
           if (theme !== "light" && theme !== "dark")
@@ -79,9 +98,18 @@
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
+    <svg class="sprite" width="0" height="0" aria-hidden="true">
+      <symbol id="stackup-key" viewBox="0 0 36 32">
+        <path class="key-g0" d="M9 19v6M18 19v6M27 19v6" />
+        <path class="key-g1" d="M9 7v6M18 7v6M27 7v6" />
+        <rect class="key-p0" x="2" y="25" width="32" height="5" rx="2" />
+        <rect class="key-p1" x="2" y="13" width="32" height="5" rx="2" />
+        <rect class="key-p2" x="2" y="1" width="32" height="5" rx="2" />
+      </symbol>
+    </svg>
     <div class="ambient" aria-hidden="true"></div>
 
-    <header class="site-header glass">
+    <header class="site-header glass" data-liquid="15 10">
       <a class="brand" href="#home" aria-label="Vidhyut Gopinath, home">
         <svg class="brand-mark" viewBox="0 0 192 76" aria-hidden="true">
           <use href="/assets/brand/vidi-sprite.svg#wordmark" />
@@ -93,6 +121,19 @@
         ><a href="#about">About</a><a href="#contact">Contact</a>
       </nav>
       <div class="header-tools">
+        <button
+          class="icon-button palette-open"
+          type="button"
+          aria-label="Open the command palette"
+          aria-keyshortcuts="Meta+K Control+K"
+          title="Commands"
+          hidden
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="6.5" />
+            <path d="m20 20-4.2-4.2" />
+          </svg>
+        </button>
         <button
           class="icon-button theme-toggle"
           type="button"
@@ -122,6 +163,11 @@
         >
       </div>
     </header>
+
+    <nav class="dock glass" aria-label="Sections" data-liquid="14 10">
+      <a href="#work">Work</a><a href="#leadership">Leadership</a
+      ><a href="#about">About</a><a href="#contact">Contact</a>
+    </nav>
 
     <main id="main">
       <section class="hero" id="home" aria-labelledby="hero-title">
@@ -307,76 +353,119 @@
             </p>
           </header>
 
-          <article class="bringup glass">
-            <div class="bringup-story">
-              <p class="eyebrow">Platform bring-up</p>
-              <h3>One thread of ownership. Across the whole stack.</h3>
+          <article
+            class="teardown"
+            data-teardown
+            aria-labelledby="bringup-title"
+          >
+            <header class="teardown-intro">
+              <h3 id="bringup-title">
+                One thread of ownership. Across the whole stack.
+              </h3>
               <p>
                 Delivered Secure Firewall bring-up as the sole engineer
                 executing scope spanning 4+ teams: firmware, FXOS, switching,
                 PHY hardware, applications, datapath, and QDMA.
               </p>
-              <p>
-                I’m now driving accelerated bring-up of two new firewall
-                platforms, carrying that same ownership through implementation,
-                build verification, and device validation.
-              </p>
-              <p class="scope">
-                <strong>4<sup>+</sup></strong>
-                <span
-                  >teams’ scope connected through one engineering effort</span
-                >
-              </p>
-            </div>
-            <figure class="stackup" data-stackup>
-              <ol class="stackup-layers">
-                <li>
-                  <span class="stackup-step">01</span>
-                  <span class="stackup-name"
-                    >Hardware interfaces<small
-                      >PHY, switching, board integration</small
-                    ></span
-                  >
-                </li>
-                <li>
-                  <span class="stackup-step">02</span>
-                  <span class="stackup-name"
-                    >Firmware & boot<small
-                      >Builds, platform initialization</small
-                    ></span
-                  >
-                </li>
-                <li>
-                  <span class="stackup-step">03</span>
-                  <span class="stackup-name"
-                    >Platform OS<small
-                      >Linux, FXOS, resource architecture</small
-                    ></span
-                  >
-                </li>
-                <li>
-                  <span class="stackup-step">04</span>
-                  <span class="stackup-name"
-                    >Datapath & applications<small
-                      >QDMA, integration, validation</small
-                    ></span
-                  >
-                </li>
-                <li>
-                  <span class="stackup-step">05</span>
-                  <span class="stackup-name"
-                    >Secure delivery<small
-                      >Signature validation, signing, PQC</small
-                    ></span
-                  >
-                </li>
-              </ol>
-              <div class="stackup-via" aria-hidden="true"><span></span></div>
+            </header>
+            <figure class="teardown-visual">
+              <div
+                class="stage teardown-stage"
+                role="img"
+                aria-label="The conceptual platform, taken apart one layer at a time: hardware, platform OS, and secure delivery. A gold via runs through every layer."
+              >
+                <canvas aria-hidden="true"></canvas>
+              </div>
               <figcaption>
                 The bring-up path, from board to build. One via runs through
-                every layer.
+                every layer. A conceptual model, not a Cisco product.
               </figcaption>
             </figure>
+            <div class="teardown-story">
+              <div class="teardown-thread" aria-hidden="true">
+                <span></span>
+              </div>
+              <ol class="teardown-steps">
+                <li class="step">
+                  <svg
+                    class="step-where"
+                    data-where="p0"
+                    viewBox="0 0 36 32"
+                    aria-hidden="true"
+                  >
+                    <use href="#stackup-key" />
+                  </svg>
+                  <span class="step-no">01</span>
+                  <h4>Hardware interfaces</h4>
+                  <p>PHY, switching, board integration</p>
+                </li>
+                <li class="step">
+                  <svg
+                    class="step-where"
+                    data-where="g0"
+                    viewBox="0 0 36 32"
+                    aria-hidden="true"
+                  >
+                    <use href="#stackup-key" />
+                  </svg>
+                  <span class="step-no">02</span>
+                  <h4>Firmware &amp; boot</h4>
+                  <p>Builds, platform initialization</p>
+                </li>
+                <li class="step">
+                  <svg
+                    class="step-where"
+                    data-where="p1"
+                    viewBox="0 0 36 32"
+                    aria-hidden="true"
+                  >
+                    <use href="#stackup-key" />
+                  </svg>
+                  <span class="step-no">03</span>
+                  <h4>Platform OS</h4>
+                  <p>Linux, FXOS, resource architecture</p>
+                </li>
+                <li class="step">
+                  <svg
+                    class="step-where"
+                    data-where="g1"
+                    viewBox="0 0 36 32"
+                    aria-hidden="true"
+                  >
+                    <use href="#stackup-key" />
+                  </svg>
+                  <span class="step-no">04</span>
+                  <h4>Datapath &amp; applications</h4>
+                  <p>QDMA, integration, validation</p>
+                </li>
+                <li class="step">
+                  <svg
+                    class="step-where"
+                    data-where="p2"
+                    viewBox="0 0 36 32"
+                    aria-hidden="true"
+                  >
+                    <use href="#stackup-key" />
+                  </svg>
+                  <span class="step-no">05</span>
+                  <h4>Secure delivery</h4>
+                  <p>Signature validation, signing, PQC</p>
+                </li>
+              </ol>
+              <div class="teardown-outro">
+                <p>
+                  I’m now driving accelerated bring-up of two new firewall
+                  platforms, carrying that same ownership through
+                  implementation, build verification, and device validation.
+                </p>
+                <p class="scope">
+                  <strong>4<sup>+</sup></strong>
+                  <span
+                    >teams’ scope connected through one engineering effort</span
+                  >
+                </p>
+              </div>
+            </div>
           </article>
 
           <div class="bento">
@@ -637,10 +726,10 @@
             <figure class="portrait glass">
               <div class="portrait-photo">
                 <img
-                  src="/assets/img/about.jpg"
+                  src="/assets/img/me.png"
                   alt="Vidhyut Gopinath"
                   width="319"
-                  height="529"
+                  height="446"
                   loading="lazy"
                   decoding="async"
                 />
